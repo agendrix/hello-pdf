@@ -1,0 +1,24 @@
+{
+  "name": "HelloPDF",
+  "version": "1.0.0",
+  "main": "package/hello_pdf.js",
+  "author": "Charles Vallières <charlesvallieres@gmail.com>",
+  "license": "MIT",
+  "files": [
+    "package"
+  ],
+  "bin": {
+    "hello-pdf": "package/bin/hello_pdf.js"
+  },
+  "scripts": {
+    "test": "jest",
+    "hello-pdf": "package/bin/hello_pdf.js"
+  },
+  "dependencies": {
+    "puppeteer": "^1.2.0",
+    "yargs": "^11.0.0"
+  },
+  "devDependencies": {
+    "jest": "^22.4.3"
+  }
+}
