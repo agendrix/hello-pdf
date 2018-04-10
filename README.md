@@ -7,20 +7,16 @@ HTML to PDF generator using Chrome Headless for Ruby
 Add this line to your application's Gemfile:
 
 ```ruby
-gem "hello-pdf"
+gem "hello-pdf", git: "git@github.com:agendrix/hello-pdf.git"
 ```
 
 And then execute:
 
     $ bundle
 
-Or install it yourself as:
-
-    $ gem install hello-pdf
-
 Add hello-pdf's npm package:
 
-    $ yarn add hello-pdf
+    $ yarn add https://github.com/agendrix/hello-pdf.git
 
 ## Usage
 
