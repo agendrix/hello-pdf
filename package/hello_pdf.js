@@ -24,7 +24,11 @@ class HelloPDF {
   async generate() {
     this.validateConfig()
     const pdfOptions = this.pdfOptions();
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      args: [
+        "--disable-web-security"
+      ]
+    });
 
     try {
       const page = await browser.newPage();

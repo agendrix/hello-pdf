@@ -1,6 +1,6 @@
 {
-  "name": "HelloPDF",
-  "version": "1.0.0",
+  "name": "hello-pdf",
+  "version": "1.0.1",
   "main": "package/hello_pdf.js",
   "author": "Charles Vallières <charlesvallieres@gmail.com>",
   "license": "MIT",
