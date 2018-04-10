@@ -20,7 +20,7 @@ Or install it yourself as:
 
 Add hello-pdf's npm package:
 
-    $ yarn add hello-ruby
+    $ yarn add hello-pdf
 
 ## Usage
 
