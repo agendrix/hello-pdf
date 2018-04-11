@@ -55,13 +55,13 @@ module HelloPdf
 
     def execute
       command = generate_command
-      logger.info "Generating pdf ..."
-      logger.info command
+      logger.debug "Generating pdf ..."
+      logger.debug command
 
       sterr, stdout, status = Open3.capture3({}, command)
 
       if status.success?
-        logger.info "PDF generated to #{output_file.path}"
+        logger.debug "PDF generated to #{output_file.path}"
       else
         logger.error "PDF Generation failed:\n#{sterr}\n#{stdout}"
       end
