@@ -63,7 +63,7 @@ class HelloPDF {
 
     // Automatically display header and footer if not set and template provided
     if (typeof options.displayHeaderFooter == "undefined") {
-      options.displayHeaderFooter = options.headerTemplate || options.footerTemplate
+      options.displayHeaderFooter = Boolean(options.headerTemplate || options.footerTemplate)
     }
 
     return options
