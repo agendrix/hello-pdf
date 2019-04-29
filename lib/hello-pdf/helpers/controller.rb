@@ -29,8 +29,8 @@ module HelloPdf
             content_type: "text/html"
           )
         else
-          header_html = options[:header] ? render_to_string({ formats: options[:formats] }.merge(options[:header])) : nil
-          footer_html = options[:footer] ? render_to_string({ formats: options[:formats] }.merge(options[:footer])) : nil
+          header_html = options[:header] ? render_to_string({ formats: options[:formats] }.merge(options[:header]).merge({ layout: nil })) : nil
+          footer_html = options[:footer] ? render_to_string({ formats: options[:formats] }.merge(options[:footer]).merge({ layout: nil })) : nil
 
           @_hello_pdf_generator = HelloPdf::Generator.new(
             html: html,
