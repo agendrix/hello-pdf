@@ -2,7 +2,7 @@ const HelloPDF = require("../hello_pdf");
 const path = require("path");
 const fs = require("fs");
 
-test("adds 1 + 2 to equal 3", () => {
+test("generate a pdf", async () => {
   const outputPath = path.resolve(__dirname, "tmp/table.pdf")
   if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath)
 
@@ -22,13 +22,9 @@ test("adds 1 + 2 to equal 3", () => {
     }
   })
 
-  pdf.generate()
-    .then((path) => {
-      expect(path).toBe(outputPath)
-      expect(fs.existsSync(outputPath)).toBe(true);
-      fs.unlinkSync(outputPath)
-    })
-    .catch((err) => {
-      console.error(err)
-    })
+  const pdfPath = await pdf.generate();
+
+  expect(pdfPath).toBe(outputPath)
+  expect(fs.existsSync(outputPath)).toBe(true);
+  fs.unlinkSync(outputPath)
 });
