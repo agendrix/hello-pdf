@@ -6,6 +6,12 @@
 /pkg/
 /spec/reports/
 
+# Ignore all logfiles and tempfiles.
+**/log/*
+**/tmp/*
+!**/log/.keep
+!**/tmp/.keep
+
 # Logs
 logs
 *.log
