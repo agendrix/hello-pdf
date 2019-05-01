@@ -43,6 +43,7 @@ render(
 ### Notes
 
 Header and footer external resources (css, images, etc.) need to be embedded directly in the html (base64 for images).
+If the pdf generation hangs, it is probably due to the fact that their is some external resources in the header or the footer.
 
 ## Development
 
