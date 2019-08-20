@@ -54,6 +54,12 @@ const pdf = new HelloPDF({
   extraArgs: args.extraArgs,
 })
 
+// Manually kill hanging processes
+const killTimeout = setTimeout(() => {
+  console.error(`Process ${process.pid} killed after timer expired.`);
+  return process.kill(process.pid);
+}, 1000 * 60 * 60); // 1 hour
+
 pdf.generate()
   .then((path) => {
     console.log(path)
@@ -62,3 +68,5 @@ pdf.generate()
     console.error(err.message)
     process.exitCode = 1
   })
+
+clearTimeout(killTimeout);
