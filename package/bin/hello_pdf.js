@@ -54,11 +54,13 @@ const pdf = new HelloPDF({
   extraArgs: args.extraArgs,
 })
 
-// Manually kill hanging processes
+// Sometimes processes hang for 38h+, causing CPUs to top at 100%
+// and causes the application to be slower. This timeout manually
+// kills hanging processes after 5 minutes has elapsed.
 const killTimeout = setTimeout(() => {
   console.error(`Process ${process.pid} killed after timer expired.`);
   return process.kill(process.pid);
-}, 1000 * 60 * 60); // 1 hour
+}, 1000 * 60 * 5); // 5 minutes
 
 pdf.generate()
   .then((path) => {
