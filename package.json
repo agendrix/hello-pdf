@@ -1,6 +1,6 @@
 {
   "name": "hello-pdf",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "main": "package/hello_pdf.js",
   "author": "Charles Vallières <charlesvallieres@gmail.com>",
   "license": "MIT",
@@ -15,7 +15,7 @@
     "hello-pdf": "package/bin/hello_pdf.js"
   },
   "dependencies": {
-    "puppeteer": "^1.2.0",
+    "puppeteer": "^5.3.0",
     "yargs": "^11.0.0"
   },
   "devDependencies": {
