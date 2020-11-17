@@ -26,7 +26,8 @@ class HelloPDF {
     const pdfOptions = this.pdfOptions();
     const browser = await puppeteer.launch({
       args: [
-        "--disable-web-security"
+        "--disable-web-security",
+        ...(this.options.extraArgs || [])
       ]
     });
 

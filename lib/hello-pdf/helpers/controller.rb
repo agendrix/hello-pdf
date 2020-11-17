@@ -36,7 +36,8 @@ module HelloPdf
             html: html,
             header_html: header_html,
             footer_html: footer_html,
-            options: options[:options]
+            options: options[:options],
+            extra_args: options[:extra_args]
           )
 
           pdf = @_hello_pdf_generator.pdf
