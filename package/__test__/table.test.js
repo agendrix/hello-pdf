@@ -6,7 +6,7 @@ test("generate a pdf", async () => {
   const outputPath = path.resolve(__dirname, "tmp/table.pdf")
   if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath)
 
-  pdf = new HelloPDF({
+  const pdf = new HelloPDF({
     headerPath: path.resolve(__dirname, "fixtures/table/header.html"),
     footerPath: path.resolve(__dirname, "fixtures/table/footer.html"),
     pageUrl: "file://" + path.resolve(__dirname, "fixtures/table/index.html"),

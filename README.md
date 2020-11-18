@@ -2,6 +2,8 @@
 
 HTML to PDF generator using Chrome Headless for Ruby
 
+![Tests](https://github.com/agendrix/hello-pdf/workflows/Tests/badge.svg)
+
 ## Installation
 
 Add this line to your application's Gemfile:
