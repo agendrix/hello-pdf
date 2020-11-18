@@ -3,11 +3,12 @@ require "tempfile"
 
 module HelloPdf
   class Generator
-    def initialize(html:, header_html: nil, footer_html: nil, options: {})
+    def initialize(html:, header_html: nil, footer_html: nil, options: {}, extra_args: [])
       @html = html
       @header_html = header_html
       @footer_html = footer_html
       @options = options
+      @extra_args = extra_args
     end
 
     def pdf
@@ -78,6 +79,7 @@ module HelloPdf
       command << "-h" << header_file.path if header_file
       command << "-f" << footer_file.path if footer_file
       command << "--pdf-options" << "'#{options_json}'" unless @options.empty?
+      command << "--extra-args" << "'#{@extra_args.to_json}'" unless @extra_args.blank?
       command.join(" ")
     end
   end

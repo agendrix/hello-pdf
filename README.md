@@ -18,6 +18,33 @@ Add hello-pdf's npm package:
 
     $ yarn add https://github.com/agendrix/hello-pdf.git
 
+## Initializer
+
+```ruby
+# config/initializers/hello_pdf.rb
+
+HelloPdf.config.layout = "layouts/pdf"
+
+HelloPdf.config.options[:margin] = {
+  top: "1cm",
+  right: "1cm",
+  bottom: "1.2cm",
+  left: "1cm",
+}
+
+HelloPdf.config.extra_args = ["--disable-setuid-sandbox", "--no-sandbox"]
+
+HelloPdf.config.header = {
+  template: "pdf/header.pdf",
+}
+
+HelloPdf.config.footer = {
+  template: "pdf/footer.pdf",
+}
+
+HelloPdf.logger = Rails.logger
+```
+
 ## Usage
 
 ```ruby

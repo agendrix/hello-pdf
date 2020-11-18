@@ -34,6 +34,11 @@ const args = require("yargs")
     type: "string",
     coerce: JSON.parse
   })
+  .option("extra-args", {
+    describe: "Extra arguments passed to browser instance used by Puppeteer",
+    type: "string",
+    coerce: JSON.parse
+  })
   .demandOption(["url", "output"], "Please provide both url and output arguments to work with this tool")
   .help()
   .argv
@@ -45,7 +50,8 @@ const pdf = new HelloPDF({
   outputPath: args.output,
   headerPath: args.header,
   footerPath: args.footer,
-  pdf: args.pdfOptions
+  pdf: args.pdfOptions,
+  extraArgs: args.extraArgs,
 })
 
 pdf.generate()
