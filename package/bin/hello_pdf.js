@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const PROCESS_TIMEOUT = parseInt(process.env.PROCESS_TIMEOUT) || 5 * 60 * 1000; // 5 minutes
+const PROCESS_TIMEOUT = parseInt(process.env.PROCESS_TIMEOUT) || 15 * 60 * 1000; // 15 minutes
 
 const path = require("path");
 const args = require("yargs")
