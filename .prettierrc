@@ -1,0 +1,14 @@
+{
+  "printWidth": 120,
+  "trailingComma": "all",
+  "singleQuote": false,
+  "htmlWhitespaceSensitivity": "strict",
+  "overrides": [
+    {
+      "files": "*.html",
+      "options": {
+        "printWidth": 360
+      }
+    }
+  ]
+}
