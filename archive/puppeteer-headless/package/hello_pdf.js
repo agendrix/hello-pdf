@@ -24,10 +24,11 @@ class HelloPDF {
   async generate() {
     this.validateConfig()
     const pdfOptions = this.pdfOptions();
+
     const browser = await puppeteer.launch({
-      args: [
-        "--disable-web-security"
-      ]
+      executablePath: "/usr/bin/chromium-browser",
+      // headless: true,
+      args: ["--disable-web-security"] // ["--no-sandbox", "--disable-dev-shm-usage"]
     });
 
     try {

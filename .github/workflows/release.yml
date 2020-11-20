@@ -1,0 +1,51 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main # TODO: To rename
+
+jobs:
+  build-and-upload:
+    name: Upload lambda function
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.STAGING_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Test
+        run: yarn test
+
+      - name: Build lambda distribution
+        run: yarn dist
+
+      - name: Upload new build to AWS lambda
+        run: |
+          aws lambda update-function-code --function-name "$FUNCTION_ARN" --zip-file "fileb://$(pwd)/out/lambda.zip"
+        env:
+          FUNCTION_ARN: ${{ secrets.FUNCTION_ARN }}
+
+  test-new-version:
+    name: Test uploaded lambda
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Test
+        run: yarn test
+        env:
+          HELLO_PDF_LAMBDA_URL: ${{ secrets.HELLO_PDF_LAMBDA_URL }}

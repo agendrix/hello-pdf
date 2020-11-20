@@ -1,24 +1,35 @@
 {
   "name": "hello-pdf",
-  "version": "1.0.3",
-  "main": "package/hello_pdf.js",
-  "author": "Charles Vallières <charlesvallieres@gmail.com>",
-  "license": "MIT",
-  "files": [
-    "package"
-  ],
-  "bin": {
-    "hello-pdf": "package/bin/hello_pdf.js"
-  },
+  "version": "v1.0.0",
+  "description": "",
   "scripts": {
-    "test": "jest",
-    "hello-pdf": "package/bin/hello_pdf.js"
-  },
-  "dependencies": {
-    "puppeteer": "^5.3.0",
-    "yargs": "^11.0.0"
+    "test": "mocha --timeout 10000 -r ts-node/register test/**/*.spec.ts",
+    "test:watch": "yarn test --watch --watch-extensions ts",
+    "build": "rm -rf ./dist && yarn tsc",
+    "postbuild": "cp package.json yarn.lock LICENSE README.md ./dist && cd dist && yarn install --production",
+    "zip": "cd dist && mkdir -p ../out && zip -q -FSr ../out/lambda .",
+    "dist": "yarn build && yarn zip"
   },
   "devDependencies": {
-    "jest": "^22.4.3"
+    "@types/aws-lambda": "^8.10.64",
+    "@types/hapi__joi": "^17.1.6",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^14.11.2",
+    "@types/pdf-parse": "^1.1.0",
+    "@types/puppeteer": "^5.4.0",
+    "@types/request": "^2.48.5",
+    "aws-sdk": "^2.785.0",
+    "mocha": "^6.2.0",
+    "pdf-parse": "^1.1.1",
+    "prettier": "^2.1.2",
+    "puppeteer": "^5.4.1",
+    "request": "^2.88.2",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.3"
+  },
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "chrome-aws-lambda": "^5.3.1",
+    "puppeteer-core": "^5.4.1"
   }
 }

@@ -1,56 +1,32 @@
-# HelloPdf
+# Terraform AWS Lambda
 
-HTML to PDF generator using Chrome Headless for Ruby
+_Template repository for creating a TypeScript AWS lambda function with Terraform_
 
-## Installation
+![Release](https://github.com/agendrix/terraform-aws-lambda/workflows/Release/badge.svg) ![Tests](https://github.com/agendrix/terraform-aws-lambda/workflows/Tests/badge.svg?branch=main)
 
-Add this line to your application's Gemfile:
+## How to use with Terraform
 
-```ruby
-gem "hello-pdf", git: "git@github.com:agendrix/hello-pdf.git"
+Add the module to your [Terraform](https://www.terraform.io/) project:
+
+```terraform
+module "terraform_aws_lambda" {
+  source      = "git@github.com:agendrix/terraform-aws-lambda.git//terraform?ref=v1.0.0"
+  lambda_name = "my-typescript-lambda"
+  role_arn    = aws_iam_role.iam_for_lambda.role_arn
+}
 ```
 
-And then execute:
+See [Resource: aws_lambda_function](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function) for more information about the required `aws_iam_role`.
 
-    $ bundle
+In order to be able to receive http requests to the lambda, you will need to hook it up with an AWS API Gateway.
+You can do so by following this guide: [Serverless Applications with AWS Lambda and API Gateway](https://learn.hashicorp.com/tutorials/terraform/lambda-api-gateway).
 
-Add hello-pdf's npm package:
+---
 
-    $ yarn add https://github.com/agendrix/hello-pdf.git
+Your AWS lambda should now be available at https://console.aws.amazon.com/lambda/.
 
-## Usage
+Logs from the lambda will be available in AWS CloudWatch `/aws/lambda/${yourLambdaName}` log group.
 
-```ruby
-render(
-  pdf: {
-    name: "Filename",
-    template: "path/to/view.pdf"
-    options: { # These options are camelized and passed to Puppeteer (https://github.com/GoogleChrome/puppeteer/blob/v1.2.0/docs/api.md#pagepdfoptions)
-      margin: {
-        top: "1cm"
-      }
-    },
-    header: {
-      template: "path/to/header.pdf",
-      locals: {
-        title: "Lorem ipsum sit dolor amet"
-      }
-    }
-  }
-)
-```
+## Release a new version of the Terraform module
 
-### Notes
-
-Header and footer external resources (css, images, etc.) need to be embedded directly in the html (base64 for images).
-If the pdf generation hangs, it is probably due to the fact that their is some external resources in the header or the footer.
-
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/agendrix/hello-pdf.
+See the [CONTRIBUTING.md](./CONTRIBUTING.md) file for more info.

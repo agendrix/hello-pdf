@@ -1,0 +1,13 @@
+{
+  "name": "hello-pdf-lambda",
+  "version": "1.0.0",
+  "description": "PDF generator in AWS lambda",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dist": "yarn && mkdir -p target && zip -r target/lambda index.js node_modules"
+  },
+  "dependencies": {
+    "tmp": "^0.1.0"
+  }
+}

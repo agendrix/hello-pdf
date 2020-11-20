@@ -1,0 +1,28 @@
+{
+  "name": "hello-pdf",
+  "version": "1.0.3",
+  "main": "package/hello_pdf.js",
+  "author": "Charles Vallières <charlesvallieres@gmail.com>",
+  "license": "MIT",
+  "files": [
+    "package"
+  ],
+  "bin": {
+    "hello-pdf": "package/bin/hello_pdf.js"
+  },
+  "scripts": {
+    "test": "jest",
+    "hello-pdf": "package/bin/hello_pdf.js"
+  },
+  "dependencies": {
+    "@hapi/hapi": "^19.1.1",
+    "express": "^4.17.1",
+    "express-validator": "^6.4.0",
+    "puppeteer": "^5.3.0",
+    "tmp": "^0.1.0",
+    "yargs": "^11.0.0"
+  },
+  "devDependencies": {
+    "jest": "^22.4.3"
+  }
+}

@@ -1,5 +1,7 @@
 source "https://rubygems.org"
 
+gem "rails", git: "https://github.com/rails/rails.git", branch: "6-0-stable"
+
 git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
 # Specify your gem's dependencies in hello_pdf.gemspec
