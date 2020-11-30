@@ -1,16 +1,10 @@
 const puppeteer = require("puppeteer");
 const fs = require("fs");
 
-//
-// HelloPDF
-//
-// Options :
-//  outputPath
-//  pageUrl
-//  headerPath
-//  footerPath
-//  pdf: {} => https://github.com/GoogleChrome/puppeteer/blob/v1.2.0/docs/api.md#pagepdfoptions
-//
+/**
+ * HelloPDF
+ * @see {@link ./bin/hello_pdf.js} for available options
+ */
 class HelloPDF {
   constructor(options) {
     this.options = options
@@ -25,6 +19,7 @@ class HelloPDF {
     this.validateConfig()
     const pdfOptions = this.pdfOptions();
     const browser = await puppeteer.launch({
+      pipe: true, // https://github.com/puppeteer/puppeteer/issues/1262#issuecomment-448311449
       args: [
         "--disable-web-security",
         ...(this.options.extraArgs || [])
