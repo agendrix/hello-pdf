@@ -32,37 +32,33 @@ test("generate a pdf", async () => {
   fs.unlinkSync(outputPath);
 });
 
-test("cli can generate PDF", async () => {
-  const cmd = ["node", path.resolve(__dirname, "../../package/bin/hello_pdf"), "--url", pageUrl, "--o", outputPath];
+describe("cli", () => {
+  const bin = path.resolve(__dirname, "../../package/bin/hello_pdf");
 
-  await new Promise(async (resolve) => {
-    exec(cmd.join(" "), (_error, stdout, _stderr) => {
-      expect(stdout.trim()).toBe(outputPath);
-      resolve();
+  test("can generate PDF", async () => {
+    const cmd = ["node", bin, "--url", pageUrl, "--o", outputPath];
+
+    await new Promise(async (resolve) => {
+      exec(cmd.join(" "), (_error, stdout, _stderr) => {
+        expect(stdout.trim()).toBe(outputPath);
+        resolve();
+      });
     });
+
+    expect(fs.existsSync(outputPath)).toBe(true);
+    fs.unlinkSync(outputPath);
   });
 
-  expect(fs.existsSync(outputPath)).toBe(true);
-  fs.unlinkSync(outputPath);
-});
+  test("can timeout", async () => {
+    const cmd = ["node", bin, "--url", pageUrl, "--o", outputPath, "--timeout", "1"];
 
-test("cli can timeout", async () => {
-  const cmd = [
-    "PROCESS_TIMEOUT=1",
-    "node",
-    path.resolve(__dirname, "../../package/bin/hello_pdf"),
-    "--url",
-    pageUrl,
-    "--o",
-    outputPath,
-  ];
-
-  await new Promise(async (resolve) => {
-    exec(cmd.join(" "), (_error, _stdout, stderr) => {
-      expect(stderr).toContain("killed after timer expired");
-      resolve();
+    await new Promise(async (resolve) => {
+      exec(cmd.join(" "), (_error, _stdout, stderr) => {
+        expect(stderr).toContain("killed after timer expired");
+        resolve();
+      });
     });
-  });
 
-  expect(fs.existsSync(outputPath)).toBe(false);
+    expect(fs.existsSync(outputPath)).toBe(false);
+  });
 });
