@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-const PROCESS_TIMEOUT = parseInt(process.env.PROCESS_TIMEOUT) || 15 * 60 * 1000; // 15 minutes
-
 const path = require("path");
 const args = require("yargs")
   .option("url", {
@@ -42,6 +40,13 @@ const args = require("yargs")
     type: "string",
     coerce: JSON.parse,
   })
+  .option("timeout", {
+    describe: "Sometimes, processes can hang for 38h+; causing CPUs to top at 100%. " +
+              "This timeout manually kills hanging processes after its value has elapsed. " +
+              "Disabled if not defined.",
+    type: "number",
+    default: undefined,
+  })
   .demandOption(["url", "output"], "Please provide both url and output arguments to work with this tool")
   .help().argv;
 
@@ -56,16 +61,15 @@ const pdf = new HelloPDF({
   extraArgs: args.extraArgs,
 });
 
-// Sometimes processes hang for 38h+, causing CPUs to top at 100%
-// and causes the application to be slower. This timeout manually
-// kills hanging processes after PROCESS_TIMEOUT has elapsed.
-const killTimeout = setTimeout(() => {
-  console.error(`Process ${process.pid} killed after timer expired.`);
-  return process.kill(process.pid);
-}, PROCESS_TIMEOUT);
+let killTimeout;
+if (args.timeout) {
+  killTimeout = setTimeout(() => {
+    console.error(`Process ${process.pid} killed after timer expired.`);
+    return process.kill(process.pid);
+  }, args.timeout);
+}
 
-pdf
-  .generate()
+pdf.generate()
   .then((path) => {
     console.log(path);
   })

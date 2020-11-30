@@ -3,12 +3,13 @@ require "tempfile"
 
 module HelloPdf
   class Generator
-    def initialize(html:, header_html: nil, footer_html: nil, options: {}, extra_args: [])
+    def initialize(html:, header_html: nil, footer_html: nil, options: {}, extra_args: [], timeout: nil)
       @html = html
       @header_html = header_html
       @footer_html = footer_html
       @options = options
       @extra_args = extra_args
+      @timeout = timeout
     end
 
     def pdf
@@ -59,15 +60,15 @@ module HelloPdf
       logger.debug "Generating pdf ..."
       logger.debug command
 
-      sterr, stdout, status = Open3.capture3({}, command)
+      stdout, stderr, status = Open3.capture3({}, command)
 
       if status.success?
         logger.debug "PDF generated to #{output_file.path}"
       else
-        logger.error "PDF Generation failed:\n#{sterr}\n#{stdout}"
+        logger.error "PDF Generation failed:\n#{stderr}\n#{stdout}"
       end
 
-      raise Error, "PDF Generation failed:\n#{sterr}\n#{stdout}" unless status.success?
+      raise Error, "PDF Generation failed:\n#{stderr}\n#{stdout}" unless status.success?
       status.success?
     end
 
@@ -80,6 +81,7 @@ module HelloPdf
       command << "-f" << footer_file.path if footer_file
       command << "--pdf-options" << "'#{options_json}'" unless @options.empty?
       command << "--extra-args" << "'#{@extra_args.to_json}'" unless @extra_args.blank?
+      command << "--timeout" << "#{@timeout}" unless @timeout.blank?
       command.join(" ")
     end
   end
