@@ -87,8 +87,6 @@ Currently, Puppeteer doesn't [properly handle target crashes](https://github.com
 This means that if errors like `out of memory` happen, the target chrome will not be closed and Puppeteer will not resolve it's promise.
 To handle that, use the `timeout` option in order to kill and prevent it from hanging indefinitely.
 
-To debug it, use the environment variable `DEBUG=*` to see all communications between Puppeteer and the Chrome instance.
-
 For the memory issue, this is the result of an `Inspector.targetCrashed`:
 
 ```bash
@@ -98,6 +96,17 @@ puppeteer:protocol:RECV ◀
     "params": {},
     "sessionId": "B24B1E37B538487C57805BC0F4F924D0"
 }
+```
+
+## Debugging
+
+To debug Puppeteer, use the environment variable `DEBUG=*` to see all communications between Puppeteer and the Chrome instance.
+
+You can also edit [lib/hello-pdf/generator.rb](./lib/hello-pdf/generator.rb) to use `system` instead of `Open3.capture3` in order for the logs appear in real-time instead of at the end of the execution.
+
+```rb
+# stdout, stderr, status = Open3.capture3({}, command)
+success = system(command)
 ```
 
 ## Contributing
