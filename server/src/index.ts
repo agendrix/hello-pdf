@@ -1,6 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
-import path from "path";
+// import path from "path";
 
 import convert from "./convert";
 
@@ -22,5 +22,5 @@ app.listen(port);
 console.log(`Running an API server at localhost:${port}`);
 
 // Uncomment to print routes
-const filepath = path.join(__dirname, "./../routes.generated.txt");
-require("express-print-routes")(app, filepath);
+// const filepath = path.join(__dirname, "./../routes.generated.txt");
+// require("express-print-routes")(app, filepath);
