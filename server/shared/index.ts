@@ -1,3 +1,4 @@
 import AsyncResult from "./AsyncResult";
+import Logger from "./Logger";
 
-export { AsyncResult };
+export { AsyncResult, Logger };

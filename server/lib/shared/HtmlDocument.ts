@@ -1,5 +1,7 @@
+import { Status } from "./types";
+
 type Metadata = {
-  status: string;
+  status: Status;
   webhookUrl?: string;
   s3Url?: string;
 };
@@ -8,13 +10,10 @@ class HtmlDocument {
   constructor(
     public filename: string,
     public body: string,
+    public meta: Metadata,
     public header?: string,
     public footer?: string,
-    public meta: Metadata) {}
-
-  hasHeaderOrFooter(): boolean {
-    return this.header != undefined || this.footer != undefined;
-  }
+  ) {}
 }
 
 export default HtmlDocument;

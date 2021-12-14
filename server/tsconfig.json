@@ -15,5 +15,5 @@
     "isolatedModules": true,
     "noEmit": true,
   },
-  "include": ["src/**/*", "lib/shared/**/*", "lib/**/*", "shared/**/*"]
+  "include": ["src/**/*", "lib/shared/**/*", "lib/**/*", "shared/**/*", "tests/**/*"]
 }

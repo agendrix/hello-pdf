@@ -1,6 +1,6 @@
 import Queue from "bull";
 import HtmlDocument from "./HtmlDocument";
 
-const ServiceQueue = new Queue<HtmlDocument>("documents", 'redis://127.0.0.1:6479');
+const ServiceQueue = new Queue<HtmlDocument>("documents", process.env.REDIS_URL!);
 
 export default ServiceQueue;

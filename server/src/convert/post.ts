@@ -2,22 +2,20 @@ import { Request, Response } from "express";
 
 import { HtmlDocument } from "../../lib/shared";
 import { AsyncResult } from "../../shared";
-import { JobStatus } from "../../lib/shared/types";
+import { Status } from "../../lib/shared/types";
 import Producer from "../../lib/producer";
 
 export default async (req: Request, res: Response) => {
   const { filename, header, body, footer, webhookUrl, s3Url } = req.body;
 
-  const document = new HtmlDocument(filename, body, header, footer, { status: JobStatus.Queued, webhookUrl, s3Url });
+  const document = new HtmlDocument(filename, body, { status: Status.Queued, webhookUrl, s3Url }, header, footer,);
   const job = await Producer.enqueue(document);
-  const status = await job.getState();
 
   if (!s3Url) {
-    job.on('completed', (job, result) => {
-      res.contentType("application/pdf");
-      return res.status(200).send(result);
-    })
+    await job.finished();
+    res.contentType("application/pdf");
+    return res.status(200).send(job.returnvalue);
   }
 
-  res.status(200).json(new AsyncResult(job.id, filename, status, webhookUrl, s3Url));
+  res.status(200).json(new AsyncResult(job.id, filename, job.returnvalue.meta.status, webhookUrl, s3Url));
 };
