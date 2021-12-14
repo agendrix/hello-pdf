@@ -1,9 +1,13 @@
 import { Router } from "express";
-import post from "./post";
-import get from "./get";
+import Multer from "multer";
 
-const routes = Router();
-routes.post("", post);
-routes.get("/:jobId", get);
+import Post from "./Post";
+import Get from "./Get";
 
-export default routes;
+const Upload = Multer();
+const Routes = Router();
+
+Routes.post("", Upload.none(), Post);
+Routes.get("/:jobId", Get);
+
+export default Routes;

@@ -1,4 +1,4 @@
 import HtmlDocument from "./HtmlDocument";
-import Queue from "./queue";
+import Queue from "./Queue";
 
 export { Queue, HtmlDocument };
