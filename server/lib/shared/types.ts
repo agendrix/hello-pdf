@@ -1,3 +1,6 @@
-import { JobStatus } from "bull";
-
-export type JobStatus = JobStatus | "stuck";
+export enum JobStatus {
+  Queued = "queued",
+  Processing = "processing",
+  Completed = "completed",
+  Failed = "failed"
+}

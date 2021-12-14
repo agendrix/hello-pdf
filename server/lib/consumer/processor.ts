@@ -1,21 +1,22 @@
 import { Job } from "bull";
+
+import { AsyncResult } from "../../shared";
 import { HtmlDocument, http } from "../shared";
+import { JobStatus } from "../shared/types";
 import PdfEngine from "./PdfEngine";
 
-module.exports = async function (job: Job) {
-  const document: HtmlDocument = job.data.document;
-  const callbackUrl: string = job.data.callbackUrl;
-  const presignedS3Url: string = job.data.presignedS3Url;
+module.exports = async function (job: Job<HtmlDocument>) {
+  const document = job.data;
+  const { meta: { webhookUrl, s3Url } } = document;
+  document.meta = { webhookUrl, s3Url, status: JobStatus.Processing };
+  job.update(document);
+
   const pdf = await PdfEngine.render(document);
 
-  if(presignedS3Url) {
-    await http.put(presignedS3Url, pdf, "");
+  if(s3Url) {
+    await http.put(s3Url, pdf, "");
+    await http.post(webhookUrl, new AsyncResult(job.id, document.filename, JobStatus.Completed, webhookUrl, s3Url));
   }
 
-  // TODO: should return pdf buffer if call is sync
-  if (callbackUrl) {
-    await http.post(callbackUrl, location);
-  }
-
-  return Promise.resolve(location);
+  return Promise.resolve(s3Url ? document : pdf)
 }

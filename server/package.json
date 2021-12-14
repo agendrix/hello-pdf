@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "start": "ts-node -P tsconfig.json src",
-    "watch": "nodemon --exec 'ts-node -P tsconfig.json' --watch server src",
+    "watch": "nodemon --exec 'ts-node -P tsconfig.json' --watch server src lib -e ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
