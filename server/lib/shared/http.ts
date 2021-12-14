@@ -1,11 +1,10 @@
 import https from "https"
 
-export async function post(uri: string, data: Object) {
-  const payload = JSON.stringify(data);
+async function request(uri: string, method: string, payload:  string | Buffer, contentType: string) {
   const options = {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': contentType,
       'Content-Length': Buffer.byteLength(payload),
     }
   }
@@ -21,8 +20,23 @@ export async function post(uri: string, data: Object) {
     });
     
     request.on("error", reject);
-    request.write(data);
+    request.write(payload);
     request.end();
   });
 }
 
+export function post(uri: string, data:  Object | string , contentType: string = "application/json") {
+  if (data instanceof Object) {
+    data = JSON.stringify(data);
+  }
+
+  return request(uri, "POST", data as string, contentType);
+}
+
+export function put(uri: string, data:  Object | string, contentType: string = "application/json") {
+  if (data instanceof Object) {
+    data = JSON.stringify(data);
+  }
+
+  return request(uri, "PUT", data as string, contentType);
+}
