@@ -9,7 +9,7 @@ node_modules/
 **/tmp/*
 !**/log/.keep
 !**/tmp/.keep
-**/tests/*.pdf
+**/tests/pdfs/**/*
 
 # Logs
 logs
