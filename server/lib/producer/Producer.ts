@@ -6,7 +6,10 @@ class Producer {
   constructor(private queue: BullQueue<HtmlDocument>) {}
 
   async enqueue(document: HtmlDocument): Promise<Job<HtmlDocument>> {
-    return this.queue.add(document);
+    return this.queue.add(document, {
+      attempts: 10,
+      backoff: { type: "exponential", delay: 500 }, // Max delay: https://github.com/OptimalBits/bull/blob/master/lib/backoffs.js#L12
+    });
   }
 }
 

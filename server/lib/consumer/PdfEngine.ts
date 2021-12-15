@@ -19,6 +19,7 @@ class PdfEngine {
       printBackground: true,
       landscape: false,
       margin: document.margins,
+      timeout: 1000 * 60 * 15,
     });
   }
 
