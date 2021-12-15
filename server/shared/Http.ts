@@ -1,6 +1,11 @@
 import https from "https";
 
-async function request(uri: string, method: string, payload: string | Buffer, contentType: string) {
+type HttpResponse = {
+  statusCode: number | undefined;
+  data: Buffer;
+};
+
+async function request(uri: string, method: string, payload: string | Buffer, contentType: string): Promise<HttpResponse> {
   const options = {
     method: "POST",
     headers: {
@@ -16,7 +21,7 @@ async function request(uri: string, method: string, payload: string | Buffer, co
         data.push(chunk);
       });
 
-      res.on("end", () => resolve(Buffer.concat(data).toString()));
+      res.on("end", () => resolve({ statusCode: res.statusCode, data: Buffer.concat(data) }));
     });
 
     request.on("error", reject);
