@@ -3,8 +3,6 @@ import dotenv from "dotenv";
 
 import Convert from "./convert";
 
-const defaultPort = 4000;
-
 dotenv.config();
 
 const app = express();
@@ -16,6 +14,6 @@ app.get("/health", (_, res) => {
 
 app.use("/convert", Convert);
 
-const port = process.env.PORT || defaultPort;
+const port = process.env.PORT || 4000;
 app.listen(port);
 console.log(`Running an API server at localhost:${port}`);

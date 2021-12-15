@@ -18,7 +18,7 @@ form.submit("http://localhost:4000/convert", function(_err, res) {
   });
 
   res.on("end", () => {
-    writeFileSync("tests/foo.pdf", Buffer.concat(data));
+    writeFileSync(`tests/${payload.filename}.pdf`, Buffer.concat(data));
   });
 });
 

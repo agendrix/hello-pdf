@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
 import { AsyncResult } from "../../shared";
-import { GetJob } from "../../lib/shared/Utils";
+import { GetJob } from "../../lib/shared";
 
 export default async (req: Request, res: Response) => {
   const jobId = req.params.jobId;
