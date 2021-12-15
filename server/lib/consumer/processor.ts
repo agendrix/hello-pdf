@@ -10,11 +10,13 @@ module.exports = async function (job: Job<HtmlDocument>) {
   document.meta = { ...document.meta, status: Status.Processing };
   job.update(document);
 
-  const { meta: { webhookUrl, s3Url } } = document;
+  const {
+    meta: { webhookUrl, s3Url },
+  } = document;
 
   const pdf = await PdfEngine.render(document);
 
-  if(s3Url && webhookUrl) {
+  if (s3Url && webhookUrl) {
     await http.put(s3Url, pdf, "");
     await http.post(webhookUrl, new AsyncResult(job.id, document.filename, Status.Completed, webhookUrl, s3Url));
   }
@@ -22,4 +24,4 @@ module.exports = async function (job: Job<HtmlDocument>) {
   document.meta = { ...document.meta, status: Status.Completed };
   job.update(document);
   return Promise.resolve(s3Url ? document : pdf);
-}
+};

@@ -1,6 +1,6 @@
 import Puppeteer, { Browser, Page } from "puppeteer";
 
-import { Logger } from "../../shared"
+import { Logger } from "../../shared";
 import { HtmlDocument } from "../shared";
 
 class PdfEngine {
@@ -10,7 +10,7 @@ class PdfEngine {
   private constructor(page: Page) {
     this.page = page;
   }
-  
+
   static async render(document: HtmlDocument): Promise<Buffer> {
     (await this.getInstance()).page.setContent(document.body);
     return this._instance.page.pdf({
@@ -23,15 +23,22 @@ class PdfEngine {
         top: "1cm",
         right: "1cm",
         bottom: "1cm",
-        left: "1cm"
-      }
+        left: "1cm",
+      },
     });
   }
-  
-  private static async init () {
+
+  private static async init() {
     Logger.log("Lauching Pupeteer");
-    const puppeteerFlags = ["--disable-dev-shm-usage", "--font-render-hinting=none", "--disable-gpu", "--disable-extensions", "--disable-setuid-sandbox", "--no-sandbox"];
-    const browser = await Puppeteer.launch({args: puppeteerFlags});
+    const puppeteerFlags = [
+      "--disable-dev-shm-usage",
+      "--font-render-hinting=none",
+      "--disable-gpu",
+      "--disable-extensions",
+      "--disable-setuid-sandbox",
+      "--no-sandbox",
+    ];
+    const browser = await Puppeteer.launch({ args: puppeteerFlags });
     const page = await browser.newPage();
     this._instance = new PdfEngine(page);
   }

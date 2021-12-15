@@ -8,7 +8,8 @@ class AsyncResult {
     private filename: string | null = null,
     private status: Status | null = null,
     private webhookUrl: string | null = null,
-    private s3Url: string | null = null) {}
+    private s3Url: string | null = null,
+  ) {}
 }
 
 export default AsyncResult;

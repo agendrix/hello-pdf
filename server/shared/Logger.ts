@@ -3,7 +3,7 @@ import { Console } from "console";
 enum Colors {
   Blue = "\x1b[34m%s\x1b[0m",
   Red = "\x1b[31m%s\x1b[0m",
-  Yellow = "\x1b[33m%s\x1b[0m"
+  Yellow = "\x1b[33m%s\x1b[0m",
 }
 
 class Logger extends Console {
@@ -13,9 +13,9 @@ class Logger extends Console {
     super({ stdout: process.stdout });
   }
 
-  static getInstance () {
+  static getInstance() {
     if (!this._instance) this._instance = new Logger();
-    return this._instance
+    return this._instance;
   }
 
   static log(text: string) {
@@ -35,4 +35,4 @@ class Logger extends Console {
   }
 }
 
-export default Logger
+export default Logger;

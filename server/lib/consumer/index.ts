@@ -1,7 +1,7 @@
 import { Queue } from "../shared";
-import dotenv from "dotenv"
-dotenv.config();
+import dotenv from "dotenv";
 
+dotenv.config();
 
 async function main() {
   const concurrency = Number(process.env.concurrency) || 1;
