@@ -8,7 +8,7 @@ import { Status } from "../../lib/shared/types";
 import Producer from "../../lib/producer";
 
 const mandatoryFields = ["filename", "body"];
-const process = async (req: Request, res: Response) => {
+const post = async (req: Request, res: Response) => {
   const { filename, header, body, footer, webhookUrl, s3Url } = req.body;
 
   const document = new HtmlDocument(filename, body, { status: Status.Queued, webhookUrl, s3Url }, header, footer,);
@@ -25,4 +25,4 @@ const process = async (req: Request, res: Response) => {
   res.status(200).json(new AsyncResult(job.id, filename, job.returnvalue.meta.status, webhookUrl, s3Url));
 };
 
-export default [requiredBodyFields(mandatoryFields), process];
+export default [requiredBodyFields(mandatoryFields), post];
