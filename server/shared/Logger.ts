@@ -1,9 +1,10 @@
-import { createWriteStream } from "fs";
 import { Console } from "console";
 
-const BLUE_TEXT = "\x1b[34m%s\x1b[0m";
-const RED_TEXT = "\x1b[31m%s\x1b[0m";
-const YELLOW_TEXT = "\x1b[33m%s\x1b[0m";
+enum Colors {
+  Blue = "\x1b[34m%s\x1b[0m",
+  Red = "\x1b[31m%s\x1b[0m",
+  Yellow = "\x1b[33m%s\x1b[0m"
+}
 
 class Logger extends Console {
   private static _instance: Logger;
@@ -22,15 +23,15 @@ class Logger extends Console {
   }
 
   static info(text: string) {
-    this.getInstance().info(BLUE_TEXT, text);
+    this.getInstance().info(Colors.Blue, text);
   }
 
   static warn(text: string) {
-    this.getInstance().warn(YELLOW_TEXT, text);
+    this.getInstance().warn(Colors.Yellow, text);
   }
 
   static error(text: string) {
-    this.getInstance().error(RED_TEXT, text);
+    this.getInstance().error(Colors.Red, text);
   }
 }
 

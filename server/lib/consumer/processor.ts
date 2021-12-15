@@ -10,11 +10,11 @@ module.exports = async function (job: Job<HtmlDocument>) {
   const document = job.data;
   document.meta = { ...document.meta, status: Status.Processing };
   job.update(document);
-  
+
   const { meta: { webhookUrl, s3Url } } = document;
 
   const pdf = await PdfEngine.render(document);
-  
+
   if(process.env.NODE_ENV === "development") {
     writeFileSync(`${process.cwd()}/tests/${document.filename}.pdf`, pdf);
   }
@@ -26,5 +26,6 @@ module.exports = async function (job: Job<HtmlDocument>) {
 
   document.meta = { ...document.meta, status: Status.Completed };
   job.update(document);
-  return Promise.resolve(s3Url ? document : pdf)
+  return Promise.resolve("Whut the hell man yo")
+  // return Promise.resolve(s3Url ? document : pdf)
 }

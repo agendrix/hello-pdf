@@ -13,6 +13,9 @@ export default async (req: Request, res: Response) => {
 
   if (!s3Url) {
     await job.finished();
+    console.log("JOB FINISHED (SYNC)!")
+    console.log(job.returnvalue);
+
     res.contentType("application/pdf");
     return res.status(200).send(job.returnvalue);
   }
