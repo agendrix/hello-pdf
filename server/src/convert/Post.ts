@@ -9,9 +9,11 @@ import Producer from "../../lib/producer";
 
 const mandatoryFields = ["filename", "body"];
 const post = async (req: Request, res: Response) => {
-  const { filename, header, body, footer, webhookUrl, s3Url } = req.body;
+  const { filename, header, body, footer, webhookUrl, s3Url, marginTop, marginRight, marginBottom, marginLeft } = req.body;
+  const metadata = new HtmlDocument.Metadata(Status.Queued, webhookUrl, s3Url);
+  const margins = new HtmlDocument.Margins(marginTop, marginRight, marginBottom, marginLeft);
 
-  const document = new HtmlDocument(filename, body, { status: Status.Queued, webhookUrl, s3Url }, header, footer,);
+  const document = new HtmlDocument(filename, body, metadata, margins, header, footer,);
   let job: Job<HtmlDocument> | null = await Producer.enqueue(document);
 
   if (!s3Url) {

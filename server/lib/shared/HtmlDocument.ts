@@ -1,19 +1,32 @@
 import { Status } from "./types";
 
-type Metadata = {
-  status: Status;
-  webhookUrl?: string;
-  s3Url?: string;
-};
 
 class HtmlDocument {
+  static Metadata = class {
+    constructor(
+      public status: Status,
+      public webhookUrl?: string,
+      public s3Url?: string,
+    ) {}
+  };
+
+  static Margins = class {
+    constructor(
+      public top: string = "1px",
+      public right: string = "1px",
+      public bottom: string = "1px",
+      public left: string = "1px") {}
+  }
+
   constructor(
     public filename: string,
     public body: string,
-    public meta: Metadata,
+    public meta: InstanceType<typeof HtmlDocument.Metadata>,
+    public margins?: InstanceType<typeof HtmlDocument.Margins>,
     public header?: string,
     public footer?: string,
   ) {}
 }
+
 
 export default HtmlDocument;

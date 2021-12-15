@@ -1,5 +1,4 @@
 import { Job } from "bull";
-import { writeFileSync } from "fs";
 
 import { AsyncResult } from "../../shared";
 import { HtmlDocument, http } from "../shared";
@@ -22,5 +21,5 @@ module.exports = async function (job: Job<HtmlDocument>) {
 
   document.meta = { ...document.meta, status: Status.Completed };
   job.update(document);
-  return Promise.resolve(s3Url ? document : pdf)
+  return Promise.resolve(s3Url ? document : pdf);
 }
