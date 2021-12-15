@@ -7,10 +7,10 @@ class HtmlDocument {
 
   static Margins = class {
     constructor(
-      public top: string = "1px",
-      public right: string = "1px",
-      public bottom: string = "1px",
-      public left: string = "1px",
+      public top: string = "1cm",
+      public right: string = "1cm",
+      public bottom: string = "1cm",
+      public left: string = "1cm",
     ) {}
   };
 

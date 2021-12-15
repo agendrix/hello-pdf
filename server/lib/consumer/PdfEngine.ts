@@ -19,12 +19,7 @@ class PdfEngine {
       footerTemplate: document.footer,
       printBackground: true,
       landscape: false,
-      margin: {
-        top: "1cm",
-        right: "1cm",
-        bottom: "1cm",
-        left: "1cm",
-      },
+      margin: document.margins,
     });
   }
 
