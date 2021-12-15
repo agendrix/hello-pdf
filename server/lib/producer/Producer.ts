@@ -1,5 +1,6 @@
-import Bull, { Queue as BullQueue, Job } from "bull";
-import { HtmlDocument, Queue } from "../shared";
+import { Queue as BullQueue, Job } from "bull";
+
+import { HtmlDocument, Queue } from "../../shared";
 
 class Producer {
   constructor(private queue: BullQueue<HtmlDocument>) {}

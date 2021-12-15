@@ -1,9 +1,9 @@
 import { Console } from "console";
 
 enum MessageLevel {
-  info = "INFO",
-  warning = "WARN",
-  error = "ERROR",
+  Info = "INFO",
+  Warning = "WARN",
+  Error = "ERROR",
 }
 
 class Log {
@@ -16,7 +16,7 @@ class Log {
     this.ts = new Date().toISOString();
     this.pid = process.pid;
     this.msg = msg;
-    this.lvl = lvl || MessageLevel.info;
+    this.lvl = lvl || MessageLevel.Info;
     this.ctx = ctx;
   }
 
@@ -42,11 +42,11 @@ class Logger extends Console {
   }
 
   static warn(msg: string, ctx?: Object) {
-    this.getInstance().log(new Log(msg, ctx, MessageLevel.warning).toString());
+    this.getInstance().log(new Log(msg, ctx, MessageLevel.Warning).toString());
   }
 
   static error(msg: string, ctx?: Object) {
-    this.getInstance().log(new Log(msg, ctx, MessageLevel.error).toString());
+    this.getInstance().log(new Log(msg, ctx, MessageLevel.Error).toString());
   }
 }
 

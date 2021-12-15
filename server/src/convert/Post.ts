@@ -1,11 +1,10 @@
-import { Request, Response } from "express";
 import { Job } from "bull";
+import { Request, Response } from "express";
 
-import { requiredBodyFields } from "../middleware";
-import { HtmlDocument, GetJob } from "../../lib/shared";
-import { AsyncResult, ErrorResult } from "../../shared";
-import { Status } from "../../lib/shared/types";
 import Producer from "../../lib/producer";
+import { AsyncResult, ErrorResult, GetJob, HtmlDocument } from "../../shared";
+import { Status } from "../../shared/types";
+import { RequiredBodyFields } from "../middleware";
 
 const mandatoryFields = ["filename", "body"];
 const post = async (req: Request, res: Response) => {
@@ -32,4 +31,4 @@ const post = async (req: Request, res: Response) => {
   res.status(200).json(new AsyncResult(job.id, filename, job.returnvalue.meta.status, webhookUrl, s3Url));
 };
 
-export default [requiredBodyFields(mandatoryFields), post];
+export default [RequiredBodyFields(mandatoryFields), post];

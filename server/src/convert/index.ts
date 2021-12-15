@@ -1,8 +1,8 @@
 import { Router } from "express";
 import Multer from "multer";
 
-import Post from "./Post";
 import Get from "./Get";
+import Post from "./Post";
 
 const Upload = Multer();
 const Routes = Router();

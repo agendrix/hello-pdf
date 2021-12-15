@@ -1,8 +1,7 @@
 import dotenv from "dotenv";
 
-import { Queue } from "../shared";
+import { Logger, Queue } from "../../shared";
 import logEvents from "./logger";
-import { Logger } from "../../shared";
 
 dotenv.config();
 

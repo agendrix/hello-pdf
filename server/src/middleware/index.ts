@@ -1,3 +1,3 @@
-import requiredBodyFields from "./requiredBodyFields";
+import RequiredBodyFields from "./RequiredBodyFields";
 
-export { requiredBodyFields };
+export { RequiredBodyFields };

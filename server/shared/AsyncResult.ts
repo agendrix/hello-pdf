@@ -1,6 +1,6 @@
 import { JobId } from "bull";
 
-import { Status } from "../lib/shared/types";
+import { Status } from "./types";
 
 class AsyncResult {
   constructor(

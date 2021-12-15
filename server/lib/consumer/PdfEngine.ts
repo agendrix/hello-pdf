@@ -1,7 +1,6 @@
 import Puppeteer, { Browser, Page } from "puppeteer";
 
-import { Logger } from "../../shared";
-import { HtmlDocument } from "../shared";
+import { HtmlDocument, Logger } from "../../shared";
 
 class PdfEngine {
   page: Page;
