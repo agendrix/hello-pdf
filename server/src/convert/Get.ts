@@ -9,8 +9,6 @@ export default async (req: Request, res: Response) => {
   const status = job?.data.meta.status;
   const filename = job?.data.filename;
 
-  const result = new AsyncResult(jobId, filename, status);
-
-  if (job) res.status(200).json(result);
-  else res.status(404).json(result)
+  if (job) res.status(200).json(new AsyncResult(jobId, filename, status));
+  else res.status(404).json();
 };
