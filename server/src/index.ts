@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 
+import Logger from "../shared/Logger";
 import Convert from "./convert";
 
 dotenv.config();
@@ -16,4 +17,4 @@ app.use("/convert", Convert);
 
 const port = process.env.PORT || 4000;
 app.listen(port);
-console.log(`Running an API server at localhost:${port}`);
+Logger.log(`Running an API server listening on port ${port}`);

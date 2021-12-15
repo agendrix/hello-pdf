@@ -1,9 +1,28 @@
 import { Console } from "console";
 
-enum Colors {
-  Blue = "\x1b[34m%s\x1b[0m",
-  Red = "\x1b[31m%s\x1b[0m",
-  Yellow = "\x1b[33m%s\x1b[0m",
+enum MessageLevel {
+  info = "INFO",
+  warning = "WARN",
+  error = "ERROR",
+}
+
+class Log {
+  private ts: string;
+  private pid: number;
+  private msg: string;
+  private lvl: MessageLevel;
+  private ctx?: Object;
+  constructor(msg: string, ctx?: Object, lvl?: MessageLevel) {
+    this.ts = new Date().toISOString();
+    this.pid = process.pid;
+    this.msg = msg;
+    this.lvl = lvl || MessageLevel.info;
+    this.ctx = ctx;
+  }
+
+  toString(): string {
+    return JSON.stringify(this);
+  }
 }
 
 class Logger extends Console {
@@ -18,20 +37,16 @@ class Logger extends Console {
     return this._instance;
   }
 
-  static log(text: string) {
-    this.getInstance().info(text);
+  static log(msg: string, ctx?: Object) {
+    this.getInstance().log(new Log(msg, ctx).toString());
   }
 
-  static info(text: string) {
-    this.getInstance().info(Colors.Blue, text);
+  static warn(msg: string, ctx?: Object) {
+    this.getInstance().log(new Log(msg, ctx, MessageLevel.warning).toString());
   }
 
-  static warn(text: string) {
-    this.getInstance().warn(Colors.Yellow, text);
-  }
-
-  static error(text: string) {
-    this.getInstance().error(Colors.Red, text);
+  static error(msg: string, ctx?: Object) {
+    this.getInstance().log(new Log(msg, ctx, MessageLevel.error).toString());
   }
 }
 
