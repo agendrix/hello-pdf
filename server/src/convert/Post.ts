@@ -2,13 +2,29 @@ import { Job } from "bull";
 import { Request, Response } from "express";
 
 import Producer from "../../lib/producer";
-import { AsyncResult, ErrorResult, GetJob, HtmlDocument } from "../../shared";
+import { AsyncResult, ErrorResult, GetJob, HtmlDocument, Logger } from "../../shared";
 import { Status } from "../../shared/types";
 import { RequiredBodyFields } from "../middleware";
 
 const mandatoryFields = ["filename", "body"];
 const post = async (req: Request, res: Response) => {
-  const { filename, header, body, footer, webhookUrl, s3Url, marginTop, marginRight, marginBottom, marginLeft } = req.body;
+  req.body.files = req.files;
+  const {
+    filename,
+    webhookUrl,
+    s3Url,
+    marginTop,
+    marginRight,
+    marginBottom,
+    marginLeft,
+    files: {
+      header: [header],
+      body: [body],
+      footer: [footer],
+    },
+  } = req.body;
+
+  Logger.log(req.body);
   const metadata = new HtmlDocument.Metadata(Status.Queued, webhookUrl, s3Url);
   const margins = new HtmlDocument.Margins(marginTop, marginRight, marginBottom, marginLeft);
 
