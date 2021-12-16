@@ -3,6 +3,7 @@ node_modules/
 
 # dotenv environment variables file
 .env
+.env.test
 
 # Ignore all logfiles and tempfiles.
 **/log/*
