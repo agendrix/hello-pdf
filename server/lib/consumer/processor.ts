@@ -1,31 +1,33 @@
 import { Job, JobId } from "bull";
+import { performance } from "perf_hooks";
 
 import { AsyncResult, HtmlDocument, Http, Logger } from "../../shared";
 import { Status } from "../../shared/types";
 import PdfEngine from "./PdfEngine";
 
 module.exports = async function (job: Job<HtmlDocument>) {
-  updateJobStatus(job, Status.Processing);
-  const document = job.data;
-  const {
-    meta: { webhookUrl, s3Url },
-  } = document;
+  return new Promise(async (resolve, reject) => {
+    const document = job.data;
+    const { webhookUrl, s3Url } = document.meta;
 
-  try {
-    const pdf = await PdfEngine.render(document);
+    try {
+      updateJobStatus(job, Status.Processing);
+      const pdf = await PdfEngine.render(document);
 
-    if (s3Url && webhookUrl) {
-      await uploadPdfToS3(s3Url, pdf);
-      await updateJobStatus(job, Status.Completed);
-      await postToWebhook(webhookUrl, document, job.id);
+      if (s3Url) {
+        await uploadPdfToS3(s3Url, pdf);
+        await updateJobStatus(job, Status.Completed);
+      }
+
+      resolve(s3Url ? document : pdf);
+    } catch (e: any) {
+      await updateJobStatus(job, Status.Failed);
+      Logger.error("An error occured", e);
+      reject(e);
+    } finally {
+      if (webhookUrl) await postToWebhook(webhookUrl, job.id);
     }
-
-    return Promise.resolve(s3Url ? document : pdf);
-  } catch (e: any) {
-    updateJobStatus(job, Status.Failed);
-    Logger.error("An error occured", e);
-    return Promise.reject(e);
-  }
+  });
 };
 
 function updateJobStatus(job: Job<HtmlDocument>, status: Status): Promise<void> {
@@ -45,11 +47,8 @@ async function uploadPdfToS3(presignedS3Url: string, pdf: Buffer) {
   }
 }
 
-async function postToWebhook(url: string, document: HtmlDocument, jobId: JobId) {
-  const response = await Http.post(
-    url,
-    new AsyncResult(jobId, document.filename, Status.Completed, document.meta.webhookUrl, document.meta.s3Url),
-  );
+async function postToWebhook(url: string, jobId: JobId) {
+  const response = await Http.post(url, new AsyncResult(jobId));
 
   if (response.statusCode != 200) {
     Logger.error(
