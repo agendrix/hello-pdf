@@ -1,6 +1,7 @@
-import Puppeteer, { Browser, Page } from "puppeteer";
+import { writeFileSync } from "fs";
+import Puppeteer from "puppeteer";
 
-import { HtmlDocument, Logger } from "../../shared";
+import { HtmlDocument } from "../../shared";
 
 const puppeteerFlags = [
   "--disable-dev-shm-usage",
@@ -12,14 +13,15 @@ const puppeteerFlags = [
 ];
 
 class PdfEngine {
-  private constructor() {}
+  public constructor() {}
 
-  static async render(document: HtmlDocument): Promise<Buffer> {
+  async render(document: HtmlDocument): Promise<Buffer> {
     return new Promise(async (resolve, reject) => {
       const browser = await Puppeteer.launch({ args: puppeteerFlags });
       const page = await browser.newPage();
       page.on("error", (e) => reject(e));
 
+      await page.setContent(document.body);
       const pdf = await page.pdf({
         displayHeaderFooter: (document.header || document.footer) != undefined,
         headerTemplate: document.header,
@@ -36,4 +38,4 @@ class PdfEngine {
   }
 }
 
-export default PdfEngine;
+export default new PdfEngine();

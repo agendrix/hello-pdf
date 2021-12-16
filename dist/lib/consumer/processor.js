@@ -14,14 +14,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const shared_1 = require("../../shared");
 const types_1 = require("../../shared/types");
-const PdfEngine_1 = __importDefault(require("./PdfEngine"));
+const pdfEngine_1 = __importDefault(require("../pdfEngine"));
 module.exports = function (job) {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             const document = job.data;
             const { webhookUrl, s3Url } = document.meta;
             try {
-                const pdf = yield PdfEngine_1.default.render(document);
+                const pdf = yield pdfEngine_1.default.render(document);
                 if (s3Url) {
                     yield uploadPdfToS3(s3Url, pdf);
                     yield updateJobStatus(job, types_1.Status.Completed);

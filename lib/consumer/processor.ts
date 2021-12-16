@@ -2,7 +2,7 @@ import { Job, JobId } from "bull";
 
 import { AsyncResult, HtmlDocument, Http, Logger } from "../../shared";
 import { Status } from "../../shared/types";
-import PdfEngine from "./PdfEngine";
+import PdfEngine from "../pdfEngine";
 
 module.exports = async function (job: Job<HtmlDocument>) {
   return new Promise(async (resolve, reject) => {
