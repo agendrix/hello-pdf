@@ -12,7 +12,8 @@
     "test-e2e:async": "ts-node tests/async.ts",
     "build": "tsc --build",
     "build:clean": "tsc --build --clean",
-    "build:force": "tsc --build --force"
+    "build:force": "tsc --build --force",
+    "prepare": "husky install"
   },
   "bin": {
     "hello-pdf-server": "./bin/hello-pdf-server",
@@ -33,6 +34,7 @@
     "@types/multer": "^1.4.7",
     "express-print-routes": "^1.0.0",
     "form-data": "^4.0.0",
+    "husky": "^7.0.4",
     "nodemon": "^2.0.15",
     "prettier": "^2.5.1",
     "ts-node": "^10.4.0",
