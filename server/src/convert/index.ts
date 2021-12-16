@@ -7,7 +7,7 @@ import Post from "./Post";
 const Upload = Multer({ storage: Multer.memoryStorage() });
 const Routes = Router();
 
-Routes.post("", Upload.any(), Post);
+Routes.post("/", Upload.any(), Post);
 Routes.get("/:jobId", Get);
 
 export default Routes;

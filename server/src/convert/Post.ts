@@ -12,9 +12,12 @@ type Files = {
   footer?: string;
 };
 
-const mandatoryFields = ["filename"];
+const mandatoryFields = { body: ["filename"], files: ["body"] };
 const post = async (req: Request, res: Response) => {
-  const files = (req.files as Array<any>).map((file) => ({ [file.fieldname]: file.buffer.toString() })) as unknown as Files;
+  const files = (req.files as Array<any>).reduce(
+    (files, file) => ({ ...files, [file.fieldname]: file.buffer.toString() }),
+    {},
+  ) as unknown as Files;
   const {
     filename,
     webhookUrl = undefined,
@@ -27,8 +30,8 @@ const post = async (req: Request, res: Response) => {
 
   const metadata = new HtmlDocument.Metadata(Status.Queued, webhookUrl, s3Url);
   const margins = new HtmlDocument.Margins(marginTop, marginRight, marginBottom, marginLeft);
-
   const document = new HtmlDocument(filename, files.body, metadata, margins, files.header, files.footer);
+
   let job: Job<HtmlDocument> | null = await Producer.enqueue(document);
 
   if (!s3Url) {

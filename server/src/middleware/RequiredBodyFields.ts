@@ -1,14 +1,24 @@
 import { NextFunction, Request, Response } from "express";
 
-import { ErrorResult } from "../../shared";
+import { ErrorResult, Logger } from "../../shared";
 
-export default (mandatoryBodyFields: Array<string>) => {
+export default (mandatoryRequestFields: { files: Array<string>; body: Array<string> }) => {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const bodyFields = Object.keys(req.body);
-    if (mandatoryBodyFields.some((field) => !bodyFields.includes(field))) {
-      res.status(400).json(new ErrorResult("Missing required body fields."));
-    } else {
-      next();
+    let error;
+    if (mandatoryRequestFields.body.some((field) => !req.body[field])) {
+      error = new ErrorResult("Missing required body fields.");
     }
+    if (
+      mandatoryRequestFields.files.some((field) => {
+        !(req.files as Array<any>)?.some((file: any) => {
+          file.fieldname === field;
+        });
+      })
+    ) {
+      error = new ErrorResult("Missing required files fields.");
+    }
+
+    if (error) res.status(400).json(error);
+    else next();
   };
 };
