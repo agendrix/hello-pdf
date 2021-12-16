@@ -7,7 +7,7 @@ type HttpResponse = {
 
 async function request(uri: string, method: string, payload: string | Buffer, contentType: string): Promise<HttpResponse> {
   const options = {
-    method: "POST",
+    method: method,
     headers: {
       "Content-Type": contentType,
       "Content-Length": Buffer.byteLength(payload),
@@ -25,13 +25,12 @@ async function request(uri: string, method: string, payload: string | Buffer, co
     });
 
     request.on("error", reject);
-    request.write(payload);
-    request.end();
+    request.write(payload, () => request.end());
   });
 }
 
 export function post(uri: string, data: Object | string, contentType: string = "application/json") {
-  if (data instanceof Object) {
+  if (data instanceof Object && contentType === "application/json") {
     data = JSON.stringify(data);
   }
 
@@ -39,7 +38,7 @@ export function post(uri: string, data: Object | string, contentType: string = "
 }
 
 export function put(uri: string, data: Object | string, contentType: string = "application/json") {
-  if (data instanceof Object) {
+  if (data instanceof Object && contentType === "application/json") {
     data = JSON.stringify(data);
   }
 

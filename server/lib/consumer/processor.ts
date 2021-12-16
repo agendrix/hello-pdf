@@ -21,8 +21,9 @@ module.exports = async function (job: Job<HtmlDocument>) {
 
     updateJobStatus(job, Status.Completed);
     return Promise.resolve(s3Url ? document : pdf);
-  } catch (e) {
+  } catch (e: any) {
     updateJobStatus(job, Status.Failed);
+    Logger.error("An error occured", e);
     return Promise.reject(e);
   }
 };
@@ -34,7 +35,7 @@ function updateJobStatus(job: Job<HtmlDocument>, status: Status) {
 }
 
 async function uploadPdfToS3(presignedS3Url: string, pdf: Buffer) {
-  const uploadResponse = await Http.put(presignedS3Url, pdf, "");
+  const uploadResponse = await Http.put(presignedS3Url, pdf, "application/pdf");
   if (uploadResponse.statusCode != 200) {
     throw new Error(
       `Something went wrong while uploading the pdf to S3. statusCode: ${
