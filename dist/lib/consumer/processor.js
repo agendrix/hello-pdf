@@ -21,7 +21,6 @@ module.exports = function (job) {
             const document = job.data;
             const { webhookUrl, s3Url } = document.meta;
             try {
-                updateJobStatus(job, types_1.Status.Processing);
                 const pdf = yield PdfEngine_1.default.render(document);
                 if (s3Url) {
                     yield uploadPdfToS3(s3Url, pdf);
