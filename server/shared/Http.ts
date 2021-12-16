@@ -1,3 +1,4 @@
+import http from "http";
 import https from "https";
 
 type HttpResponse = {
@@ -6,6 +7,7 @@ type HttpResponse = {
 };
 
 async function request(uri: string, method: string, payload: string | Buffer, contentType: string): Promise<HttpResponse> {
+  const client = new URL(uri).protocol === "https:" ? https : http;
   const options = {
     method: method,
     headers: {
@@ -15,7 +17,7 @@ async function request(uri: string, method: string, payload: string | Buffer, co
   };
 
   return new Promise((resolve, reject) => {
-    const request = https.request(uri, options, (res) => {
+    const request = client.request(uri, options, (res) => {
       const data: Array<any> = [];
       res.on("data", (chunk) => {
         data.push(chunk);
