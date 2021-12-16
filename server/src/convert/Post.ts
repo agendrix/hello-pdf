@@ -4,22 +4,15 @@ import { Request, Response } from "express";
 import Producer from "../../lib/producer";
 import { AsyncResult, ErrorResult, GetJob, HtmlDocument, Logger } from "../../shared";
 import { Status } from "../../shared/types";
-import { RequestLogger, RequiredBodyFields } from "../middleware";
+import { RequiredBodyFields } from "../middleware";
 
-type Files = {
-  body: string;
-  header?: string;
-  footer?: string;
-};
-
-const mandatoryFields = { body: ["filename"], files: ["body"] };
+const mandatoryFields = ["filename", "body"];
 const post = async (req: Request, res: Response) => {
-  const files = (req.files as Array<any>).reduce(
-    (files, file) => ({ ...files, [file.fieldname]: file.buffer.toString() }),
-    {},
-  ) as unknown as Files;
   const {
     filename,
+    body,
+    header = undefined,
+    footer = undefined,
     webhookUrl = undefined,
     s3Url = undefined,
     marginTop = undefined,
@@ -30,7 +23,7 @@ const post = async (req: Request, res: Response) => {
 
   const metadata = new HtmlDocument.Metadata(Status.Queued, webhookUrl, s3Url);
   const margins = new HtmlDocument.Margins(marginTop, marginRight, marginBottom, marginLeft);
-  const document = new HtmlDocument(filename, files.body, metadata, margins, files.header, files.footer);
+  const document = new HtmlDocument(filename, body, metadata, margins, header, footer);
 
   let job: Job<HtmlDocument> | null = await Producer.enqueue(document);
 
@@ -50,4 +43,4 @@ const post = async (req: Request, res: Response) => {
   res.status(200).json(new AsyncResult(job.id, filename, job.returnvalue.meta.status, webhookUrl, s3Url));
 };
 
-export default [RequestLogger, RequiredBodyFields(mandatoryFields), post];
+export default [RequiredBodyFields(mandatoryFields), post];

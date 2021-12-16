@@ -5,8 +5,14 @@ import { Logger } from "../../shared";
 export default function (req: Request, res: Response, next: NextFunction) {
   Logger.log("request received", {
     method: req.method,
-    path: req.path,
-    body: { ...req.body, files: (req.files as Array<any>).map((file) => file.fieldname) },
+    path: req.originalUrl,
+    async: req.body.async,
+    filename: req.body.filename,
+    files: {
+      body: !!req.body.body,
+      header: !!req.body.header,
+      footer: !!req.body.footer,
+    },
   });
   next();
 }
