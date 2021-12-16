@@ -4,7 +4,7 @@ import { Logger, Queue } from "../../shared";
 
 export default function logEvents() {
   listenOnQueueEvents();
-  logStats();
+  if (process.env.NODE_ENV === "production") logStats();
 }
 
 function listenOnQueueEvents() {

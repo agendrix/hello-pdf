@@ -13,16 +13,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
+const fs_1 = require("fs");
 const shared_1 = require("../../shared");
 const logger_1 = __importDefault(require("./logger"));
 dotenv_1.default.config();
+function Processor() {
+    const processor = (0, fs_1.readdirSync)(__dirname).find((file) => file.search(/^processor\.[js|ts]+/) != -1);
+    return `${__dirname}/${processor}`;
+}
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         (0, logger_1.default)();
         const concurrency = Number(process.env.HELLO_PDF_CONCURRENY) || 1;
-        const processor = `${__dirname}/processor.ts`;
         shared_1.Logger.log(`Workers started with concurrency: ${concurrency}`);
-        shared_1.Queue.process(concurrency, processor);
+        const processor = Processor();
+        if (processor) {
+            shared_1.Queue.process(concurrency, processor);
+        }
+        else {
+            throw new Error("Queue process not found");
+        }
     });
 }
 main();

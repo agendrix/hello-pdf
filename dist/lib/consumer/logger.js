@@ -13,7 +13,8 @@ const timers_1 = require("timers");
 const shared_1 = require("../../shared");
 function logEvents() {
     listenOnQueueEvents();
-    logStats();
+    if (process.env.NODE_ENV === "production")
+        logStats();
 }
 exports.default = logEvents;
 function listenOnQueueEvents() {
