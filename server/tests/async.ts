@@ -1,28 +1,64 @@
+import express from "express";
+import fs from "fs";
+
 import { FILENAME, GetBaseFormData, URL } from "./utils";
 
-const form = GetBaseFormData();
+const app = express();
 
-form.append("s3_url", "some url");
-form.append("webhook_url", "some other url");
+app.use(express.json());
 
-form.submit(URL, function (err, res) {
-  if (err) {
-    console.log("Async upload failed:");
-    console.log(err);
+app.put("/bucket", (req, res) => {
+  console.log("Sent pdf to S3 bucket!");
+  const path = `tests/pdfs/${FILENAME}.pdf`;
 
-    return;
-  }
-
-  var body = "";
-  res.on("data", function () {
-    body += res.read();
+  let data: any[] = [];
+  req.on("data", function (chunk) {
+    data.push(chunk);
   });
 
-  res.on("end", () => {
-    console.log(body);
-    console.log("Returned first response.");
-    // const path = `tests/pdfs/${FILENAME}.pdf`;
-    // console.log("Sync upload succeed.");
-    // console.log(`Pdf written to: ${path}`);
+  req.on("end", function () {
+    fs.writeFileSync(path, Buffer.concat(data));
+    console.log(`Pdf written to: ${path}`);
+
+    res.status(200).json({ message: "Everything's good!" });
+  });
+});
+
+app.post("/webhook", (req, res) => {
+  console.log("Sent result to webhook!");
+  console.log(req.body);
+
+  res.status(200).json({ message: "Everything's good!" });
+
+  httpServer.close();
+});
+
+const httpServer = require("http").createServer(app);
+
+httpServer.listen(5000, () => {
+  console.log("Started server for webhook.");
+
+  const form = GetBaseFormData();
+
+  form.append("webhook_url", "http://localhost:5000/webhook");
+  form.append("s3_url", "http://localhost:5000/bucket");
+
+  form.submit(URL, function (err, res) {
+    if (err) {
+      console.log("Async upload failed:");
+      console.log(err);
+
+      return;
+    }
+
+    let data = "";
+    res.on("data", function (chunk) {
+      data += chunk;
+    });
+
+    res.on("end", () => {
+      const body = JSON.parse(data);
+      console.log(`File '${body["filename"]}' with id '${body["id"]}' has been queued.`);
+    });
   });
 });
