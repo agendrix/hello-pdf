@@ -2,45 +2,37 @@ import Puppeteer, { Browser, Page } from "puppeteer";
 
 import { HtmlDocument, Logger } from "../../shared";
 
-class PdfEngine {
-  page: Page;
-  private static _instance: PdfEngine;
+const puppeteerFlags = [
+  "--disable-dev-shm-usage",
+  "--font-render-hinting=none",
+  "--disable-gpu",
+  "--disable-extensions",
+  "--disable-setuid-sandbox",
+  "--no-sandbox",
+];
 
-  private constructor(page: Page) {
-    this.page = page;
-  }
+class PdfEngine {
+  private constructor() {}
 
   static async render(document: HtmlDocument): Promise<Buffer> {
-    (await this.getInstance()).page.setContent(document.body);
-    return this._instance.page.pdf({
-      displayHeaderFooter: (document.header || document.footer) != undefined,
-      headerTemplate: document.header,
-      footerTemplate: document.footer,
-      printBackground: true,
-      landscape: false,
-      margin: document.margins,
-      timeout: 1000 * 60 * 15,
+    return new Promise(async (resolve, reject) => {
+      const browser = await Puppeteer.launch({ args: puppeteerFlags });
+      const page = await browser.newPage();
+      page.on("error", (e) => reject(e));
+
+      const pdf = await page.pdf({
+        displayHeaderFooter: (document.header || document.footer) != undefined,
+        headerTemplate: document.header,
+        footerTemplate: document.footer,
+        printBackground: true,
+        landscape: false,
+        margin: document.margins,
+        timeout: 1000 * 60 * 15,
+      });
+
+      resolve(pdf);
+      browser.close();
     });
-  }
-
-  private static async init() {
-    Logger.log("Lauching Pupeteer");
-    const puppeteerFlags = [
-      "--disable-dev-shm-usage",
-      "--font-render-hinting=none",
-      "--disable-gpu",
-      "--disable-extensions",
-      "--disable-setuid-sandbox",
-      "--no-sandbox",
-    ];
-    const browser = await Puppeteer.launch({ args: puppeteerFlags });
-    const page = await browser.newPage();
-    this._instance = new PdfEngine(page);
-  }
-
-  private static async getInstance(): Promise<PdfEngine> {
-    if (!this._instance) await this.init();
-    return this._instance;
   }
 }
 
