@@ -13,46 +13,34 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const puppeteer_1 = __importDefault(require("puppeteer"));
-const shared_1 = require("../../shared");
+const puppeteerFlags = [
+    "--disable-dev-shm-usage",
+    "--font-render-hinting=none",
+    "--disable-gpu",
+    "--disable-extensions",
+    "--disable-setuid-sandbox",
+    "--no-sandbox",
+];
 class PdfEngine {
-    constructor(page) {
-        this.page = page;
-    }
+    constructor() { }
     static render(document) {
         return __awaiter(this, void 0, void 0, function* () {
-            (yield this.getInstance()).page.setContent(document.body);
-            return this._instance.page.pdf({
-                displayHeaderFooter: (document.header || document.footer) != undefined,
-                headerTemplate: document.header,
-                footerTemplate: document.footer,
-                printBackground: true,
-                landscape: false,
-                margin: document.margins,
-                timeout: 1000 * 60 * 15,
-            });
-        });
-    }
-    static init() {
-        return __awaiter(this, void 0, void 0, function* () {
-            shared_1.Logger.log("Lauching Pupeteer");
-            const puppeteerFlags = [
-                "--disable-dev-shm-usage",
-                "--font-render-hinting=none",
-                "--disable-gpu",
-                "--disable-extensions",
-                "--disable-setuid-sandbox",
-                "--no-sandbox",
-            ];
-            const browser = yield puppeteer_1.default.launch({ args: puppeteerFlags });
-            const page = yield browser.newPage();
-            this._instance = new PdfEngine(page);
-        });
-    }
-    static getInstance() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (!this._instance)
-                yield this.init();
-            return this._instance;
+            return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+                const browser = yield puppeteer_1.default.launch({ args: puppeteerFlags });
+                const page = yield browser.newPage();
+                page.on("error", (e) => reject(e));
+                const pdf = yield page.pdf({
+                    displayHeaderFooter: (document.header || document.footer) != undefined,
+                    headerTemplate: document.header,
+                    footerTemplate: document.footer,
+                    printBackground: true,
+                    landscape: false,
+                    margin: document.margins,
+                    timeout: 1000 * 60 * 15,
+                });
+                resolve(pdf);
+                browser.close();
+            }));
         });
     }
 }
