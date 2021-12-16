@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetJob = void 0;
 const bull_1 = __importDefault(require("bull"));
 const Queue_1 = __importDefault(require("./Queue"));
-const ServiceQueue = new bull_1.default("documents", process.env.HELLO_PDF_REDIS_URL);
+const ServiceQueue = new bull_1.default("documents", process.env.HELLO_PDF_REDIS_URL || "redis://127.0.0.1:6379");
 const GetJob = (jobId) => __awaiter(void 0, void 0, void 0, function* () {
     return Queue_1.default.getJob(jobId);
 });
