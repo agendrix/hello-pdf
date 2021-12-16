@@ -7,7 +7,7 @@ dotenv.config();
 
 async function main() {
   logEvents();
-  const concurrency = Number(process.env.concurrency) || 1;
+  const concurrency = Number(process.env.HELLO_PDF_CONCURRENY) || 1;
   const processor = `${__dirname}/processor.ts`;
   Logger.log(`Workers started with concurrency: ${concurrency}`);
   Queue.process(concurrency, processor);
