@@ -2,7 +2,7 @@ import { Job } from "bull";
 import { Request, Response } from "express";
 
 import Producer from "../../lib/producer";
-import { AsyncResult, ErrorResult, GetJob, HtmlDocument, Logger } from "../../shared";
+import { AsyncResult, ErrorResult, GetJob, HtmlDocument } from "../../shared";
 import { Status } from "../../shared/types";
 import { RequiredBodyFields } from "../middleware";
 
@@ -31,9 +31,7 @@ const post = async (req: Request, res: Response) => {
     await job.finished();
     job = await GetJob(job.id);
     if (!job) {
-      return res
-        .status(500)
-        .json(new ErrorResult("Something weird happened. The job finished but we were unable to retrieve it."));
+      throw new ErrorResult("Something weird happened. The job finished but we were unable to retrieve it.");
     }
 
     res.contentType("application/pdf");

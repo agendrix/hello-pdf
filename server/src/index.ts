@@ -3,12 +3,13 @@ import express from "express";
 
 import Logger from "../shared/Logger";
 import Convert from "./convert";
-import { Multer, RequestLogger } from "./middleware";
+import { ErrorHandler, Multer, RequestLogger } from "./middleware";
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
+app.use(ErrorHandler);
 app.use(Multer);
 app.use(RequestLogger);
 
