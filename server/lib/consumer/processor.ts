@@ -16,10 +16,10 @@ module.exports = async function (job: Job<HtmlDocument>) {
 
     if (s3Url && webhookUrl) {
       await uploadPdfToS3(s3Url, pdf);
+      await updateJobStatus(job, Status.Completed);
       await postToWebhook(webhookUrl, document, job.id);
     }
 
-    updateJobStatus(job, Status.Completed);
     return Promise.resolve(s3Url ? document : pdf);
   } catch (e: any) {
     updateJobStatus(job, Status.Failed);
@@ -28,10 +28,10 @@ module.exports = async function (job: Job<HtmlDocument>) {
   }
 };
 
-function updateJobStatus(job: Job<HtmlDocument>, status: Status) {
+function updateJobStatus(job: Job<HtmlDocument>, status: Status): Promise<void> {
   const document = job.data;
   document.meta = { ...document.meta, status: status };
-  job.update(document);
+  return job.update(document);
 }
 
 async function uploadPdfToS3(presignedS3Url: string, pdf: Buffer) {
