@@ -13,6 +13,8 @@ export default function (req: Request, res: Response, next: NextFunction) {
       header: !!req.body.header,
       footer: !!req.body.footer,
     },
+    webhookUrl: req.body.webhook_url,
+    s3Url: req.body.s3_url.split("?")[0],
   });
   next();
 }

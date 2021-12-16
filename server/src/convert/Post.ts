@@ -13,21 +13,21 @@ const post = async (req: Request, res: Response) => {
     body,
     header = undefined,
     footer = undefined,
-    webhookUrl = undefined,
-    s3Url = undefined,
-    marginTop = undefined,
-    marginRight = undefined,
-    marginBottom = undefined,
-    marginLeft = undefined,
+    webhook_url = undefined,
+    s3_url = undefined,
+    margin_top = undefined,
+    margin_right = undefined,
+    margin_bottom = undefined,
+    margin_left = undefined,
   } = req.body;
 
-  const metadata = new HtmlDocument.Metadata(Status.Queued, webhookUrl, s3Url);
-  const margins = new HtmlDocument.Margins(marginTop, marginRight, marginBottom, marginLeft);
+  const metadata = new HtmlDocument.Metadata(Status.Queued, webhook_url, s3_url);
+  const margins = new HtmlDocument.Margins(margin_top, margin_right, margin_bottom, margin_left);
   const document = new HtmlDocument(filename, body, metadata, margins, header, footer);
 
   let job: Job<HtmlDocument> | null = await Producer.enqueue(document);
 
-  if (!s3Url) {
+  if (!s3_url) {
     await job.finished();
     job = await GetJob(job.id);
     if (!job) {
@@ -38,7 +38,7 @@ const post = async (req: Request, res: Response) => {
     return res.status(200).send(Buffer.from(job?.returnvalue.data));
   }
 
-  res.status(200).json(new AsyncResult(job.id, filename, job.returnvalue.meta.status, webhookUrl, s3Url));
+  res.status(200).json(new AsyncResult(job.id, filename, document.meta.status, webhook_url, s3_url));
 };
 
 export default [RequiredBodyFields(mandatoryFields), post];
