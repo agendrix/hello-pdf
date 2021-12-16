@@ -8,7 +8,6 @@ import { RequiredBodyFields } from "../middleware";
 
 const mandatoryFields = ["filename", "body"];
 const post = async (req: Request, res: Response) => {
-  console.log(Object.keys(req.body));
   const {
     filename,
     body,
