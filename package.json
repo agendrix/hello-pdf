@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "hello-pdf",
   "version": "1.0.0",
   "description": "Hello-PDF micro service for web.",
   "scripts": {
@@ -13,6 +13,10 @@
     "build": "tsc --build",
     "build:clean": "tsc --build --clean",
     "build:force": "tsc --build --force"
+  },
+  "bin": {
+    "hello-pdf-server": "./bin/hello-pdf-server",
+    "hello-pdf-worker": "./bin/hello-pdf-worker"
   },
   "dependencies": {
     "bull": "^4.1.1",

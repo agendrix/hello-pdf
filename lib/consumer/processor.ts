@@ -1,5 +1,4 @@
 import { Job, JobId } from "bull";
-import { performance } from "perf_hooks";
 
 import { AsyncResult, HtmlDocument, Http, Logger } from "../../shared";
 import { Status } from "../../shared/types";
