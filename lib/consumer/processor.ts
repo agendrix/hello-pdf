@@ -11,7 +11,6 @@ module.exports = async function (job: Job<HtmlDocument>) {
     const { webhookUrl, s3Url } = document.meta;
 
     try {
-      updateJobStatus(job, Status.Processing);
       const pdf = await PdfEngine.render(document);
 
       if (s3Url) {
