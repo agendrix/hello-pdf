@@ -3,7 +3,7 @@ import Multer from "multer";
 
 const Upload = Multer({ storage: Multer.memoryStorage() });
 
-function appendFilesToBody(req: Request, res: Response, next: NextFunction) {
+function appendFilesToBody(req: Request, _: Response, next: NextFunction) {
   if (req.files) {
     (req.files as Array<any>).forEach((file) => {
       req.body[file.fieldname] = file.buffer.toString();

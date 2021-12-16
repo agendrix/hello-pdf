@@ -1,7 +1,12 @@
-import Queue from "bull";
+import BullQueue, { Job, JobId } from "bull";
 
 import HtmlDocument from "./HtmlDocument";
+import Queue from "./Queue";
 
-const ServiceQueue = new Queue<HtmlDocument>("documents", process.env.REDIS_URL!);
+const ServiceQueue = new BullQueue<HtmlDocument>("documents", process.env.REDIS_URL!);
+
+export const GetJob = async (jobId: JobId): Promise<Job<HtmlDocument> | null> => {
+  return Queue.getJob(jobId);
+};
 
 export default ServiceQueue;

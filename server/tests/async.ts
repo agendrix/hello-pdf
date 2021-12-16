@@ -2,8 +2,8 @@ import { FILENAME, GetBaseFormData, URL } from "./utils";
 
 const form = GetBaseFormData();
 
-form.append("s3Url", "some url");
-form.append("webhookUrl", "some other url");
+form.append("s3_url", "some url");
+form.append("webhook_url", "some other url");
 
 form.submit(URL, function (err, res) {
   if (err) {

@@ -13,10 +13,10 @@ export const URL = `http://localhost:${port}/convert`;
 
 export const CommonPayload = {
   filename: FILENAME,
-  marginTop: "2cm",
-  marginRight: "2cm",
-  marginBottom: "2cm",
-  marginLeft: "2cm",
+  margin_top: "2cm",
+  margin_right: "2cm",
+  margin_bottom: "2cm",
+  margin_left: "2cm",
 };
 
 export const GetBaseFormData = () => {
