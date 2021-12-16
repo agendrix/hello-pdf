@@ -3,6 +3,8 @@ import fs from "fs";
 
 import { FILENAME, GetBaseFormData, URL } from "./utils";
 
+console.log("================= Async Upload: Start =====================\n")
+
 const app = express();
 
 app.use(express.json());
@@ -31,6 +33,8 @@ app.post("/webhook", (req, res) => {
   res.status(200).json({ message: "Everything's good!" });
 
   httpServer.close();
+
+  console.log("\n================= Async Upload: End   =====================")
 });
 
 const httpServer = require("http").createServer(app);

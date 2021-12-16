@@ -2,6 +2,8 @@ import { writeFileSync } from "fs";
 
 import { FILENAME, GetBaseFormData, URL } from "./utils";
 
+console.log("================= Sync Upload: Start =====================\n")
+
 GetBaseFormData().submit(URL, function (err, res) {
   if (err) {
     console.log("Sync upload failed:");
@@ -20,5 +22,8 @@ GetBaseFormData().submit(URL, function (err, res) {
     writeFileSync(path, Buffer.concat(data));
     console.log("Sync upload succeed.");
     console.log(`Pdf written to: ${path}`);
+
+    console.log("\n================= Sync Upload: End   =====================");
   });
 });
+

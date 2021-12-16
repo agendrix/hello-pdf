@@ -6,9 +6,12 @@
     "start": "yarn start:server& yarn start:worker",
     "start:server": "ts-node -P tsconfig.json src",
     "start:worker": "ts-node -P tsconfig.json lib/consumer/index.ts",
-    "watch": "nodemon --exec 'ts-node -P tsconfig.json' --watch server src lib -e ts",
+    "test": "yarn test-e2e",
+    "test-e2e": "yarn test-e2e:sync && yarn test-e2e:async",
     "test-e2e:sync": "ts-node tests/sync.ts",
-    "test-e2e:async": "ts-node tests/async.ts"
+    "test-e2e:async": "ts-node tests/async.ts",
+    "build": "tsc --build",
+    "build:clean": "tsc --build --clean"
   },
   "dependencies": {
     "bull": "^4.1.1",
