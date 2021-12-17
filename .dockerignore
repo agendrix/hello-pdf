@@ -12,44 +12,39 @@
 /src
 /tests
 
-/routes.generated.txt 
-/tsconfig.json
-
-# Ignore local scripts at the root of the docker folder
-
 # Don't copy secrets
 .env*
 
 # Dev tools
+tsconfig.json
 .eslintignore
 .eslintrc
 .prettierrc
 .prettierignore
-.rubocop_manual_todo.yml
-.rubocop_todo.html
-.rubocop_todo.yml
-.rubocop.yml
 .scss-lint.yml
 .stylelintrc
 dangerfile.js
-.solargraph.yml
 .DS_Store
+routes.generated.txt 
 
 # ----------------- From `.gitignore` -----------------
-/.bundle
-/db/*.sqlite3
-/db/*.sqlite3-journal
-/log
-/tmp
-/public/uploads
-/public/javascripts/translations.js
-/test/reports
-/node_modules
-/yarn-error.log
-/public/assets
-/public/packs
-/public/packs-test
-/app/frontend/vendor/i18n/translations
-.gitkey
-.byebug_history
-/.vagrant
+# Dependency directories
+node_modules/
+
+# dotenv environment variables file
+.env
+.env.test
+
+# Ignore all logfiles and tempfiles.
+**/log/*
+**/tmp/*
+!**/log/.keep
+!**/tmp/.keep
+**/tests/pdfs/**/*
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

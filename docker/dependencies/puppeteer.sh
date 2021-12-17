@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+# Remove apt-key stdout is not a terminal warnings
+APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=DontWarn
+
 # https://github.com/puppeteer/puppeteer/blob/main/docs/troubleshooting.md#running-puppeteer-in-docker
 echo "Installing puppeteer"  \
   && apt-get update \
