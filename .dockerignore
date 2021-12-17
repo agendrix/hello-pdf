@@ -1,0 +1,55 @@
+/.git
+/.vscode
+/.github
+/.storybook
+/.vscode
+
+# Ignore ts files
+/lib
+/server
+/service
+/shared
+/src
+/tests
+
+/routes.generated.txt 
+/tsconfig.json
+
+# Ignore local scripts at the root of the docker folder
+
+# Don't copy secrets
+.env*
+
+# Dev tools
+.eslintignore
+.eslintrc
+.prettierrc
+.prettierignore
+.rubocop_manual_todo.yml
+.rubocop_todo.html
+.rubocop_todo.yml
+.rubocop.yml
+.scss-lint.yml
+.stylelintrc
+dangerfile.js
+.solargraph.yml
+.DS_Store
+
+# ----------------- From `.gitignore` -----------------
+/.bundle
+/db/*.sqlite3
+/db/*.sqlite3-journal
+/log
+/tmp
+/public/uploads
+/public/javascripts/translations.js
+/test/reports
+/node_modules
+/yarn-error.log
+/public/assets
+/public/packs
+/public/packs-test
+/app/frontend/vendor/i18n/translations
+.gitkey
+.byebug_history
+/.vagrant
