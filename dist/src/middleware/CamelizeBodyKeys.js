@@ -9,8 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Utils_1 = require("../../shared/Utils");
+const shared_1 = require("../../shared");
 exports.default = (req, _, next) => __awaiter(void 0, void 0, void 0, function* () {
-    req.body = (0, Utils_1.Camelize)(req.body);
+    req.body = (0, shared_1.Camelize)(req.body);
     next();
 });

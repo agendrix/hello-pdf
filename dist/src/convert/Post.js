@@ -18,9 +18,8 @@ const types_1 = require("../../shared/types");
 const middleware_1 = require("../middleware");
 const mandatoryFields = ["filename", "body"];
 const post = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { filename, body, header = undefined, footer = undefined, webhookUrl = undefined, s3Url = undefined, marginTop = undefined, marginRight = undefined, marginBottom = undefined, marginLeft = undefined, } = req.body;
+    const { filename, body, header = undefined, footer = undefined, webhookUrl = undefined, s3Url = undefined, margins = undefined, } = req.body;
     const metadata = new shared_1.HtmlDocument.Metadata(types_1.Status.Queued, webhookUrl, s3Url);
-    const margins = new shared_1.HtmlDocument.Margins(marginTop, marginRight, marginBottom, marginLeft);
     const document = new shared_1.HtmlDocument(filename, body, metadata, margins, header, footer);
     let job = yield producer_1.default.enqueue(document);
     if (!s3Url) {

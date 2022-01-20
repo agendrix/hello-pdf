@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const zlib_1 = require("zlib");
 const shared_1 = require("../../shared");
 const types_1 = require("../../shared/types");
 const pdfEngine_1 = __importDefault(require("../pdfEngine"));
@@ -26,7 +27,7 @@ module.exports = function (job) {
                     yield uploadPdfToS3(s3Url, pdf);
                     yield updateJobStatus(job, types_1.Status.Completed);
                 }
-                resolve(s3Url ? document : pdf);
+                resolve(s3Url ? document : compress(pdf));
             }
             catch (e) {
                 yield updateJobStatus(job, types_1.Status.Failed);
@@ -60,4 +61,7 @@ function postToWebhook(url, jobId) {
             shared_1.Logger.error(`Pdf was rendered and uploaded successfully but the webhook http called returned an unsuccessful status code. statusCode: ${response.statusCode}, data: ${response.data.toString("utf-8")}`, { jobId });
         }
     });
+}
+function compress(file) {
+    return (0, zlib_1.deflateSync)(file);
 }

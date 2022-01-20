@@ -29,7 +29,7 @@ class PdfEngine {
                 const browser = yield puppeteer_1.default.launch({ args: puppeteerFlags });
                 const page = yield browser.newPage();
                 page.on("error", (e) => reject(e));
-                yield page.setContent(document.body);
+                yield page.setContent(document.body, { waitUntil: "networkidle2" });
                 const pdf = yield page.pdf({
                     displayHeaderFooter: (document.header || document.footer) != undefined,
                     headerTemplate: document.header,

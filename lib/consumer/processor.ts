@@ -1,4 +1,5 @@
 import { Job, JobId } from "bull";
+import { deflateSync } from "zlib";
 
 import { AsyncResult, HtmlDocument, Http, Logger } from "../../shared";
 import { Status } from "../../shared/types";
@@ -17,7 +18,7 @@ module.exports = async function (job: Job<HtmlDocument>) {
         await updateJobStatus(job, Status.Completed);
       }
 
-      resolve(s3Url ? document : pdf);
+      resolve(s3Url ? document : compress(pdf));
     } catch (e: any) {
       await updateJobStatus(job, Status.Failed);
       Logger.error("An error occured", e);
@@ -56,4 +57,8 @@ async function postToWebhook(url: string, jobId: JobId) {
       { jobId },
     );
   }
+}
+
+function compress(file: Buffer) {
+  return deflateSync(file);
 }

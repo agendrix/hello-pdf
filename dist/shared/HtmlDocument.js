@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class HtmlDocument {
-    constructor(filename, body, meta, margins, header, footer) {
+    constructor(filename, body, meta, margins = new HtmlDocument.Margins(), header, footer) {
         this.filename = filename;
         this.body = body;
         this.meta = meta;

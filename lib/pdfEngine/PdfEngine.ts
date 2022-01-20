@@ -21,7 +21,7 @@ class PdfEngine {
       const page = await browser.newPage();
       page.on("error", (e) => reject(e));
 
-      await page.setContent(document.body);
+      await page.setContent(document.body, { waitUntil: "networkidle2" });
       const pdf = await page.pdf({
         displayHeaderFooter: (document.header || document.footer) != undefined,
         headerTemplate: document.header,

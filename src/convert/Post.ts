@@ -15,14 +15,10 @@ const post = async (req: Request, res: Response) => {
     footer = undefined,
     webhookUrl = undefined,
     s3Url = undefined,
-    marginTop = undefined,
-    marginRight = undefined,
-    marginBottom = undefined,
-    marginLeft = undefined,
+    margins = undefined,
   } = req.body;
 
   const metadata = new HtmlDocument.Metadata(Status.Queued, webhookUrl, s3Url);
-  const margins = new HtmlDocument.Margins(marginTop, marginRight, marginBottom, marginLeft);
   const document = new HtmlDocument(filename, body, metadata, margins, header, footer);
 
   let job: Job<HtmlDocument> | null = await Producer.enqueue(document);

@@ -1,16 +1,18 @@
+import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import express from "express";
 
 import Logger from "../shared/Logger";
 import Convert from "./convert";
-import { CamelizeBodyKeys, ErrorHandler, Multer, RequestLogger } from "./middleware";
+import { CamelizeBodyKeys, ErrorHandler, RequestLogger } from "./middleware";
+
+const MAX_BODY_SIZE = "20mb";
 
 dotenv.config();
 
 const app = express();
-app.use(express.json());
+app.use(bodyParser.json({ inflate: true, limit: MAX_BODY_SIZE }));
 app.use(ErrorHandler);
-app.use(Multer);
 app.use(CamelizeBodyKeys);
 app.use(RequestLogger);
 

@@ -18,7 +18,7 @@ class HtmlDocument {
     public filename: string,
     public body: string,
     public meta: InstanceType<typeof HtmlDocument.Metadata>,
-    public margins?: InstanceType<typeof HtmlDocument.Margins>,
+    public margins: InstanceType<typeof HtmlDocument.Margins> = new HtmlDocument.Margins(),
     public header?: string,
     public footer?: string,
   ) {}
