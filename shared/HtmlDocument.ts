@@ -21,6 +21,8 @@ class HtmlDocument {
     public margins: InstanceType<typeof HtmlDocument.Margins> = new HtmlDocument.Margins(),
     public header?: string,
     public footer?: string,
+    public scale: number = 1,
+    public landscape: boolean = false,
   ) {}
 }
 

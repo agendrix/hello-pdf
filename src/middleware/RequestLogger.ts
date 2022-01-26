@@ -3,18 +3,29 @@ import { NextFunction, Request, Response } from "express";
 import { Logger } from "../../shared";
 
 export default function (req: Request, _: Response, next: NextFunction) {
-  Logger.log("request received", {
+  let request: Record<string, any> = {
     method: req.method,
     path: req.originalUrl,
-    async: req.body.async,
-    filename: req.body.filename,
-    files: {
-      body: !!req.body.body,
-      header: !!req.body.header,
-      footer: !!req.body.footer,
-    },
-    webhookUrl: req.body.webhookUrl,
-    s3Url: req.body.s3Url?.split("?")[0],
-  });
+  };
+
+  if (req.body) {
+    request = {
+      ...request,
+      body: {
+        async: req.body.async,
+        filename: req.body.filename,
+        body_present: !!req.body.body,
+        header_present: !!req.body.header,
+        footer_present: !!req.body.footer,
+        scale: req.body.scale,
+        landscape: req.body.landscape,
+        margins: req.body.margins,
+        webhookUrl: req.body.webhookUrl,
+        s3Url: req.body.s3Url?.split("?")[0],
+      },
+    };
+  }
+
+  Logger.log("request received", request);
   next();
 }

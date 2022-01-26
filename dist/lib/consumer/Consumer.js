@@ -24,7 +24,7 @@ class Consumer {
                 shared_1.Queue.process(concurrency, processor);
             }
             else {
-                throw new Error("Queue process not found");
+                throw new Error("Queue processor not found");
             }
         });
     }

@@ -1,12 +1,12 @@
-import { writeFileSync } from "fs";
 import Puppeteer from "puppeteer";
 
-import { HtmlDocument } from "../../shared";
+import { HtmlDocument, Logger } from "../../shared";
 
+// https://peter.sh/experiments/chromium-command-line-switches/
 const puppeteerFlags = [
-  "--disable-dev-shm-usage",
   "--font-render-hinting=none",
   "--disable-gpu",
+  "--disable-dev-shm-usage",
   "--disable-extensions",
   "--disable-setuid-sandbox",
   "--no-sandbox",
@@ -17,7 +17,7 @@ class PdfEngine {
 
   async render(document: HtmlDocument): Promise<Buffer> {
     return new Promise(async (resolve, reject) => {
-      const browser = await Puppeteer.launch({ args: puppeteerFlags });
+      const browser = await Puppeteer.launch({ args: puppeteerFlags, userDataDir: `${process.cwd()}/tmp` });
       const page = await browser.newPage();
       page.on("error", (e) => reject(e));
 
@@ -27,8 +27,9 @@ class PdfEngine {
         headerTemplate: document.header,
         footerTemplate: document.footer,
         printBackground: true,
-        landscape: false,
         margin: document.margins,
+        landscape: document.landscape,
+        scale: document.scale,
         timeout: 1000 * 60 * 15,
       });
 

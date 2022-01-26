@@ -1,13 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class HtmlDocument {
-    constructor(filename, body, meta, margins = new HtmlDocument.Margins(), header, footer) {
+    constructor(filename, body, meta, margins = new HtmlDocument.Margins(), header, footer, scale = 1, landscape = false) {
         this.filename = filename;
         this.body = body;
         this.meta = meta;
         this.margins = margins;
         this.header = header;
         this.footer = footer;
+        this.scale = scale;
+        this.landscape = landscape;
     }
 }
 HtmlDocument.Metadata = class {

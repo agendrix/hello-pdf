@@ -13,10 +13,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const puppeteer_1 = __importDefault(require("puppeteer"));
+// https://peter.sh/experiments/chromium-command-line-switches/
 const puppeteerFlags = [
-    "--disable-dev-shm-usage",
     "--font-render-hinting=none",
     "--disable-gpu",
+    "--disable-dev-shm-usage",
     "--disable-extensions",
     "--disable-setuid-sandbox",
     "--no-sandbox",
@@ -26,7 +27,7 @@ class PdfEngine {
     render(document) {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-                const browser = yield puppeteer_1.default.launch({ args: puppeteerFlags });
+                const browser = yield puppeteer_1.default.launch({ args: puppeteerFlags, userDataDir: `${process.cwd()}/tmp` });
                 const page = yield browser.newPage();
                 page.on("error", (e) => reject(e));
                 yield page.setContent(document.body, { waitUntil: "networkidle2" });
@@ -35,8 +36,9 @@ class PdfEngine {
                     headerTemplate: document.header,
                     footerTemplate: document.footer,
                     printBackground: true,
-                    landscape: false,
                     margin: document.margins,
+                    landscape: document.landscape,
+                    scale: document.scale,
                     timeout: 1000 * 60 * 15,
                 });
                 resolve(pdf);
