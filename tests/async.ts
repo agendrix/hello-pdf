@@ -1,68 +1,61 @@
 import express from "express";
 import fs from "fs";
 
-import { FILENAME, GetBaseFormData, URL } from "./utils";
+import { Http } from "../shared";
+import { FILENAME, GetBasePayload, URL } from "./utils";
 
-console.log("================= Async Upload: Start =====================\n")
+const asyncTest = async () => {
+  console.log("================= Async Upload: Start =====================\n");
 
-const app = express();
+  const app = express();
 
-app.use(express.json());
+  app.use(express.json());
 
-app.put("/bucket", (req, res) => {
-  console.log("Sent pdf to S3 bucket!");
-  const path = `tests/pdfs/${FILENAME}.pdf`;
+  app.put("/bucket", (req, res) => {
+    console.log("Sent pdf to S3 bucket!");
+    const path = `tests/pdfs/${FILENAME}.pdf`;
 
-  let data: any[] = [];
-  req.on("data", function (chunk) {
-    data.push(chunk);
+    let data: any[] = [];
+    req.on("data", function (chunk) {
+      data.push(chunk);
+    });
+
+    req.on("end", function () {
+      fs.writeFileSync(path, Buffer.concat(data));
+      console.log(`Pdf written to: ${path}`);
+
+      res.status(200).json({ message: "Everything's good!" });
+    });
   });
 
-  req.on("end", function () {
-    fs.writeFileSync(path, Buffer.concat(data));
-    console.log(`Pdf written to: ${path}`);
+  app.post("/webhook", (req, res) => {
+    console.log("Sent result to webhook!");
+    console.log(req.body);
 
     res.status(200).json({ message: "Everything's good!" });
+
+    httpServer.close();
+
+    console.log("\n================= Async Upload: End   =====================");
   });
-});
 
-app.post("/webhook", (req, res) => {
-  console.log("Sent result to webhook!");
-  console.log(req.body);
+  const httpServer = require("http").createServer(app);
 
-  res.status(200).json({ message: "Everything's good!" });
+  httpServer.listen(5000, async () => {
+    console.log("Started server for webhook.");
 
-  httpServer.close();
+    let payload: Record<string, any> = GetBasePayload();
 
-  console.log("\n================= Async Upload: End   =====================")
-});
+    payload = {
+      ...payload,
+      webhook_url: "http://localhost:5000/webhook",
+      s3_url: "http://localhost:5000/bucket",
+    };
 
-const httpServer = require("http").createServer(app);
-
-httpServer.listen(5000, () => {
-  console.log("Started server for webhook.");
-
-  const form = GetBaseFormData();
-
-  form.append("webhook_url", "http://localhost:5000/webhook");
-  form.append("s3_url", "http://localhost:5000/bucket");
-
-  form.submit(URL, function (err, res) {
-    if (err) {
-      console.log("Async upload failed:");
-      console.log(err);
-
-      return;
-    }
-
-    let data = "";
-    res.on("data", function (chunk) {
-      data += chunk;
-    });
-
-    res.on("end", () => {
-      const body = JSON.parse(data);
-      console.log(`File '${body["filename"]}' with id '${body["id"]}' has been queued.`);
-    });
+    const response = await Http.post(URL, JSON.stringify(payload));
+    const body = JSON.parse(response.data.toString());
+    console.log(`File '${body["filename"]}' with id '${body["id"]}' has been queued.`);
   });
-});
+};
+
+asyncTest();

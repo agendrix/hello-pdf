@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
-import FormData from "form-data";
 import fs from "fs";
 import path from "path";
+import { deflateSync } from "zlib";
 
 dotenv.config({ path: path.join(__dirname, "/../.env.test") });
 
@@ -13,17 +13,16 @@ export const URL = `http://localhost:${port}/convert`;
 
 export const CommonPayload = {
   filename: FILENAME,
-  margin_top: "2cm",
-  margin_right: "2cm",
-  margin_bottom: "2cm",
-  margin_left: "2cm",
+  margins: {
+    top: "2cm",
+    right: "2cm",
+    bottom: "2cm",
+    left: "2cm",
+  },
+  scale: 0.5,
+  landscape: true,
 };
 
-export const GetBaseFormData = () => {
-  const form = new FormData();
-  Object.entries(CommonPayload).forEach(([key, value]) => form.append(key, value));
-
-  form.append("body", Buffer.from(file), { filename: FILENAME });
-
-  return form;
+export const GetBasePayload = () => {
+  return { ...CommonPayload, body: file };
 };

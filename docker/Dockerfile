@@ -8,7 +8,7 @@ RUN ./prerequisites.sh
 RUN ./puppeteer.sh
 RUN ./cleanup.sh
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chrome-stable
 
 WORKDIR /app
 
