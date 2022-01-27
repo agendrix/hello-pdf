@@ -27,7 +27,7 @@ class PdfEngine {
     render(document) {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-                const browser = yield puppeteer_1.default.launch({ args: puppeteerFlags, userDataDir: `${process.cwd()}/tmp` });
+                const browser = yield puppeteer_1.default.launch({ args: puppeteerFlags, userDataDir: "/tmp" });
                 const page = yield browser.newPage();
                 page.on("error", (e) => reject(e));
                 yield page.setContent(document.body, { waitUntil: "networkidle2" });

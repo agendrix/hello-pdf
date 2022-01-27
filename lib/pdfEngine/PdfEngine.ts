@@ -17,7 +17,7 @@ class PdfEngine {
 
   async render(document: HtmlDocument): Promise<Buffer> {
     return new Promise(async (resolve, reject) => {
-      const browser = await Puppeteer.launch({ args: puppeteerFlags, userDataDir: `${process.cwd()}/tmp` });
+      const browser = await Puppeteer.launch({ args: puppeteerFlags, userDataDir: "/tmp" });
       const page = await browser.newPage();
       page.on("error", (e) => reject(e));
 
