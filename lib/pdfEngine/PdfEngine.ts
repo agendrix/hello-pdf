@@ -12,12 +12,15 @@ const puppeteerFlags = [
   "--no-sandbox",
 ];
 
+// 'userDataDir' enables sharing of cached assets between browser sessions
+const userDataDir = process.env.NODE_ENV == "production" ? "/tmp" : undefined;
+
 class PdfEngine {
   public constructor() {}
 
   async render(document: HtmlDocument): Promise<Buffer> {
     return new Promise(async (resolve, reject) => {
-      const browser = await Puppeteer.launch({ args: puppeteerFlags, userDataDir: "/tmp" });
+      const browser = await Puppeteer.launch({ args: puppeteerFlags, userDataDir: userDataDir });
       const page = await browser.newPage();
       page.on("error", (e) => reject(e));
 

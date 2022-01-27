@@ -13,7 +13,8 @@
     "build": "tsc --build",
     "build:clean": "tsc --build --clean",
     "build:force": "tsc --build --force",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "health-check": "ts-node ./lib/consumer/HealthCheckTest.ts"
   },
   "bin": {
     "hello-pdf-server": "./bin/hello-pdf-server",
@@ -22,7 +23,6 @@
   "dependencies": {
     "body-parser": "^1.19.1",
     "bull": "^4.1.1",
-    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "puppeteer": "^13.0.0"
   },

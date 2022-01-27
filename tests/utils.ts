@@ -1,14 +1,10 @@
-import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
-import { deflateSync } from "zlib";
-
-dotenv.config({ path: path.join(__dirname, "/../.env.test") });
 
 const file = fs.readFileSync(path.resolve(__dirname, "./test.html"), "utf8");
 const port = process.env.HELLO_PDF_SERVER_PORT || 4000;
 
-export const FILENAME = process.env.FILENAME || "test";
+export const FILENAME = "test";
 export const URL = `http://localhost:${port}/convert`;
 
 export const CommonPayload = {

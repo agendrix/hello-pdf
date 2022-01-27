@@ -3,9 +3,23 @@ import { readdirSync } from "fs";
 import { Logger, Queue } from "../../shared";
 
 class Consumer {
-  public constructor() {}
+  private static _instance: Consumer;
+  private constructor() {}
 
-  async consume() {
+  static getInstance() {
+    if (!this._instance) this._instance = new Consumer();
+    return this._instance;
+  }
+
+  static consume() {
+    this.getInstance().consume();
+  }
+
+  static async isHealthy() {
+    return (await Queue.getWorkers()).length > 0;
+  }
+
+  private async consume() {
     this.listenOnQueueEvents();
     this.logStats();
     const concurrency = Number(process.env.HELLO_PDF_CONCURRENY) || 1;
@@ -100,4 +114,4 @@ class Consumer {
   }
 }
 
-export default new Consumer();
+export default Consumer;

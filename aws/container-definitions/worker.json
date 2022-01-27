@@ -4,6 +4,12 @@
     "name": "worker",
     "image": "<IMAGE>",
     "command": ["hello-pdf-worker"],
+    "healthCheck": {
+      "command": ["CMD-SHELL", "hello-pdf-worker --health"],
+      "interval": 10,
+      "retries": 1,
+      "timeout": 10
+    },
     "portMappings": [],
     "environment": [],
     "secrets": ["Secrets from app.secrets.json will be used during the deployment workflow"],

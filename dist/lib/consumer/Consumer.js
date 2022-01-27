@@ -13,6 +13,19 @@ const fs_1 = require("fs");
 const shared_1 = require("../../shared");
 class Consumer {
     constructor() { }
+    static getInstance() {
+        if (!this._instance)
+            this._instance = new Consumer();
+        return this._instance;
+    }
+    static consume() {
+        this.getInstance().consume();
+    }
+    static isHealthy() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return (yield shared_1.Queue.getWorkers()).length > 0;
+        });
+    }
     consume() {
         return __awaiter(this, void 0, void 0, function* () {
             this.listenOnQueueEvents();
@@ -95,4 +108,4 @@ class Consumer {
         }
     }
 }
-exports.default = new Consumer();
+exports.default = Consumer;
