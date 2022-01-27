@@ -88,7 +88,7 @@ class Consumer {
         // });
     }
     logStats() {
-        if (process.env.NODE_ENV === "production") {
+        if (process.env.HELLO_PDF_LOG_STATS == "true") {
             setInterval(() => __awaiter(this, void 0, void 0, function* () {
                 shared_1.Logger.log("stats", yield shared_1.Queue.getJobCounts());
             }), 5000);

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const shared_1 = require("../../shared");
+const skipLoggingForPaths = ["/health"];
 function default_1(req, _, next) {
     var _a;
     let request = {
@@ -21,7 +22,8 @@ function default_1(req, _, next) {
                 s3Url: (_a = req.body.s3Url) === null || _a === void 0 ? void 0 : _a.split("?")[0],
             } });
     }
-    shared_1.Logger.log("request received", request);
+    if (!skipLoggingForPaths.includes(request.path))
+        shared_1.Logger.log("request received", request);
     next();
 }
 exports.default = default_1;

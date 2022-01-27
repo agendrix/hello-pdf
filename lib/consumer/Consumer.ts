@@ -92,7 +92,7 @@ class Consumer {
   }
 
   private logStats() {
-    if (process.env.NODE_ENV === "production") {
+    if (process.env.HELLO_PDF_LOG_STATS == "true") {
       setInterval(async () => {
         Logger.log("stats", await Queue.getJobCounts());
       }, 5000);

@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from "express";
 
 import { Logger } from "../../shared";
 
+const skipLoggingForPaths = ["/health"];
+
 export default function (req: Request, _: Response, next: NextFunction) {
   let request: Record<string, any> = {
     method: req.method,
@@ -26,6 +28,6 @@ export default function (req: Request, _: Response, next: NextFunction) {
     };
   }
 
-  Logger.log("request received", request);
+  if (!skipLoggingForPaths.includes(request.path)) Logger.log("request received", request);
   next();
 }
