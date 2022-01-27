@@ -1,0 +1,26 @@
+[
+  {
+    "essential": true,
+    "name": "worker",
+    "image": "<IMAGE>",
+    "command": ["hello-pdf-worker"],
+    "portMappings": [],
+    "environment": [],
+    "secrets": ["Secrets from app.secrets.json will be used during the deployment workflow"],
+    "linuxParameters": {
+      "initProcessEnabled": true
+    },
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "/ecs/<CLUSTER>/worker",
+        "awslogs-region": "ca-central-1",
+        "awslogs-stream-prefix": "worker"
+      }
+    },
+    "cpu": 0,
+    "volumesFrom": [],
+    "mountPoints": [],
+    "stopTimeout": 30
+  }
+]

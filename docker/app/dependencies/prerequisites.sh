@@ -6,3 +6,6 @@ echo "Installing build dependencies" && \
   wget \
   ssh \
   gnupg
+
+echo "Setup ssh"
+mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts

@@ -1,0 +1,25 @@
+[
+  {
+    "essential": true,
+    "name": "app",
+    "image": "<IMAGE>",
+    "command": ["hello-pdf-server"],
+    "portMappings": [{ "containerPort": 4000, "protocol": "tcp" }],
+    "environment": [],
+    "secrets": ["Secrets from app.secrets.json will be used during the deployment workflow"],
+    "linuxParameters": {
+      "initProcessEnabled": true
+    },
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "/ecs/<CLUSTER>/app",
+        "awslogs-region": "ca-central-1",
+        "awslogs-stream-prefix": "app"
+      }
+    },
+    "cpu": 0,
+    "volumesFrom": [],
+    "mountPoints": []
+  }
+]

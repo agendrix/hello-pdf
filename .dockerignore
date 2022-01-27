@@ -4,19 +4,13 @@
 /.storybook
 /.vscode
 
-# Ignore ts files
-/lib
-/server
-/service
-/shared
-/src
-/tests
+# Ignore compiled version
+/dist
 
 # Don't copy secrets
 .env*
 
 # Dev tools
-tsconfig.json
 .eslintignore
 .eslintrc
 .prettierrc
@@ -37,10 +31,9 @@ node_modules/
 
 # Ignore all logfiles and tempfiles.
 **/log/*
-**/tmp/*
+tmp/
 !**/log/.keep
 !**/tmp/.keep
-**/tests/pdfs/**/*
 
 # Logs
 logs
@@ -48,3 +41,6 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Tests
+/tests

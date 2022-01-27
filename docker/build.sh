@@ -26,8 +26,8 @@ export SSH_KEY
 
 echo "*** Building image with NODE_ENV=$NODE_ENV ***"
 
-echo "-> Building base image"
-$withssh docker build -t agendrix/hello-pdf -f "$ROOT/docker/Dockerfile" . 
+echo "-> Building app image"
+$withssh docker build --ssh default --build-arg NODE_ENV="$NODE_ENV" -t agendrix/hello-pdf -f "$ROOT/docker/app/Dockerfile" .
 
 echo "-> Cleaning up unused images"
 docker image prune -f
