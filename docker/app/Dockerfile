@@ -1,10 +1,10 @@
 # Stage 1: Compile typescript app
-FROM node:16-slim as compilation
+FROM node:16 as compilation
 COPY . .
 RUN ./docker/app/compilation/compile.sh
 
 # Stage 2: Install runtime dependencies
-FROM node:16-slim as dependencies
+FROM node:16 as dependencies
 WORKDIR /tmp
 COPY ./docker/app/dependencies .
 RUN ./prerequisites.sh
