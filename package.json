@@ -21,6 +21,7 @@
     "hello-pdf-worker": "./bin/hello-pdf-worker"
   },
   "dependencies": {
+    "@appsignal/cli": "^1.1.14",
     "@appsignal/express": "^1.0.25",
     "@appsignal/nodejs": "^2.3.1",
     "body-parser": "^1.19.1",
