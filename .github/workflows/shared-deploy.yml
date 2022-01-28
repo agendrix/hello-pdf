@@ -93,6 +93,15 @@ jobs:
         with:
           ssh-key: ${{ secrets.ssh_key }}
 
+      - name: Build and push nginx to ECR
+        id: build-nginx
+        uses: agendrix/actions/aws/build-and-push-to-ecr@master
+        with:
+          ecr_registry: ${{ steps.login-ecr.outputs.registry }}
+          image: ${{ env.DOCKER_IMAGE_PREFIX }}/nginx
+          tag: ${{ needs.pre-build.outputs.image_tag }}
+          path: "docker/nginx"
+
       - name: Build and push app to ECR
         id: build-app
         uses: agendrix/actions/aws/build-and-push-to-ecr@master
@@ -107,17 +116,21 @@ jobs:
           file: "docker/app/Dockerfile"
 
     outputs:
+      nginx_image: ${{ steps.build-nginx.outputs.image }}
       app_image: ${{ steps.build-app.outputs.image }}
 
   deploy-app-worker:
-    name: Deploy app | worker
+    name: Deploy nginx | app | worker
     runs-on: ubuntu-latest
     needs: [build-images]
     strategy:
       fail-fast: false
       matrix:
-        service: [app, worker]
+        service: [nginx, app, worker]
         include:
+          - service: nginx
+            image: ${{ needs.build-images.outputs.nginx_image }}
+            secrets_path: aws/container-definitions/nginx.secrets.json
           - service: app
             image: ${{ needs.build-images.outputs.app_image }}
             secrets_path: aws/container-definitions/app.secrets.json

@@ -24,10 +24,11 @@ echo "-> Fetching local ssh key"
 SSH_KEY=$(cat ~/.ssh/id_rsa)
 export SSH_KEY
 
-echo "*** Building image with NODE_ENV=$NODE_ENV ***"
-
-echo "-> Building app image"
+echo "-> Building app image with NODE_ENV=$NODE_ENV"
 $withssh docker build --ssh default --build-arg NODE_ENV="$NODE_ENV" -t agendrix/hello-pdf -f "$ROOT/docker/app/Dockerfile" .
+
+echo "-> Building nginx image"
+docker build -t agendrix/hello-pdf/nginx "$ROOT/docker/nginx"
 
 echo "-> Cleaning up unused images"
 docker image prune -f

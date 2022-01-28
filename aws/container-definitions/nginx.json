@@ -1,0 +1,22 @@
+[
+  {
+    "essential": true,
+    "name": "nginx",
+    "image": "<IMAGE>",
+    "portMappings": [{ "containerPort": 80, "protocol": "tcp" }],
+    "ulimits": [{ "hardLimit": 1048576, "name": "nofile", "softLimit": 1048576 }],
+    "environment": [{ "name": "NGINX_ENTRYPOINT_QUIET_LOGS", "value": "1" }],
+    "secrets": ["Secrets from nginx.secrets.json will be used during the deployment workflow"],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "/ecs/<CLUSTER>/nginx",
+        "awslogs-region": "ca-central-1",
+        "awslogs-stream-prefix": "nginx"
+      }
+    },
+    "cpu": 0,
+    "volumesFrom": [],
+    "mountPoints": []
+  }
+]
