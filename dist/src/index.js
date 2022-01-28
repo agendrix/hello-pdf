@@ -16,7 +16,7 @@ app.use(middleware_1.ErrorHandler);
 app.use(middleware_1.CamelizeBodyKeys);
 app.use(middleware_1.RequestLogger);
 // Routers
-app.use("/health", health_1.default);
+app.get("/health", health_1.default);
 app.use("/convert", convert_1.default);
 const port = process.env.HELLO_PDF_SERVER_PORT || 4000;
 app.listen(port);

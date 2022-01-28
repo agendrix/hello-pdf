@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 
 import { ErrorResult } from "../../shared";
 
-export default (mandatoryBodyFields: Array<string>) => {
+export default function (mandatoryBodyFields: Array<string>) {
   return async (req: Request, res: Response, next: NextFunction) => {
     const bodyFields = Object.keys(req.body);
     if (mandatoryBodyFields.some((field) => !bodyFields.includes(field))) {
@@ -11,4 +11,4 @@ export default (mandatoryBodyFields: Array<string>) => {
       next();
     }
   };
-};
+}

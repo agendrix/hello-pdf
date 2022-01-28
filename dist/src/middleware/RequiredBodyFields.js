@@ -10,8 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const shared_1 = require("../../shared");
-exports.default = (mandatoryBodyFields) => {
-    return (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+function default_1(mandatoryBodyFields) {
+    return (req, res, next) => __awaiter(this, void 0, void 0, function* () {
         const bodyFields = Object.keys(req.body);
         if (mandatoryBodyFields.some((field) => !bodyFields.includes(field))) {
             res.status(400).json(new shared_1.ErrorResult("Missing required body fields."));
@@ -20,4 +20,5 @@ exports.default = (mandatoryBodyFields) => {
             next();
         }
     });
-};
+}
+exports.default = default_1;

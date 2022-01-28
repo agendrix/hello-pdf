@@ -1,9 +1,5 @@
-import { Router } from "express";
+import { Request, Response } from "express";
 
-const Routes = Router();
-
-Routes.get("/health", (_, res) => {
+export default function (_: Request, res: Response) {
   res.status(200).json({ message: "Everything's good!" });
-});
-
-export default Routes;
+}

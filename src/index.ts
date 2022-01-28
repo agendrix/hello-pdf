@@ -15,7 +15,7 @@ app.use(CamelizeBodyKeys);
 app.use(RequestLogger);
 
 // Routers
-app.use("/health", Health);
+app.get("/health", Health);
 app.use("/convert", Convert);
 
 const port = process.env.HELLO_PDF_SERVER_PORT || 4000;
