@@ -13,14 +13,14 @@
     "build": "tsc --build",
     "build:clean": "tsc --build --clean",
     "build:force": "tsc --build --force",
-    "prepare": "husky install",
-    "health-check": "ts-node ./lib/consumer/HealthCheckTest.ts"
+    "prepare": "husky install"
   },
   "bin": {
     "hello-pdf-server": "./bin/hello-pdf-server",
     "hello-pdf-worker": "./bin/hello-pdf-worker"
   },
   "dependencies": {
+    "@appsignal/cli": "^1.1.14",
     "@appsignal/express": "^1.0.25",
     "@appsignal/nodejs": "^2.3.1",
     "body-parser": "^1.19.1",

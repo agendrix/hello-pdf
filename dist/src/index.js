@@ -3,11 +3,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// To auto-instrument modules, the Appsignal module must be both required and initialized before any other package
+const AppSignal_1 = __importDefault(require("./AppSignal"));
 const express_1 = require("@appsignal/express");
 const body_parser_1 = __importDefault(require("body-parser"));
 const express_2 = __importDefault(require("express"));
 const Logger_1 = __importDefault(require("../shared/Logger"));
-const AppSignal_1 = __importDefault(require("./AppSignal"));
 const convert_1 = __importDefault(require("./convert"));
 const health_1 = __importDefault(require("./health"));
 const middleware_1 = require("./middleware");
