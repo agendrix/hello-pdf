@@ -26,6 +26,7 @@ env:
   AWS_REGION: ca-central-1
   SERVICE_DEPLOYMENT_TIMEOUT: 15
   NODE_ENV: production
+  PING_SLACK: true
 
 jobs:
   pre-build:
