@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+
+require("../dist/src/index.js");
+require("../dist/lib/consumer/index.js");
