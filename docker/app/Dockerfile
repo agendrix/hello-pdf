@@ -19,8 +19,8 @@ WORKDIR /app
 ARG NODE_ENV
 ENV NODE_ENV=${NODE_ENV}
 ENV PATH="/app/bin:${PATH}"
+COPY ./bin ./bin
 COPY package.json yarn.lock ./
 RUN --mount=type=ssh yarn install --frozen-lockfile --ignore-optional --production
-COPY ./bin ./bin
 COPY --from=compilation /dist ./dist
 EXPOSE 4000
