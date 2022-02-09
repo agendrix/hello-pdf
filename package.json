@@ -1,9 +1,8 @@
 {
   "name": "hello-pdf",
   "version": "1.0.0",
-  "description": "Hello-PDF micro service for web.",
+  "description": "Hello-PDF micro service",
   "scripts": {
-    "preinstall": "./bin/setup.sh",
     "start": "yarn start:server & yarn start:worker",
     "start:server": "ts-node -P tsconfig.json src",
     "start:worker": "ts-node -P tsconfig.json lib/consumer/index.ts",
@@ -13,13 +12,18 @@
     "test-e2e:async": "ts-node tests/async.ts",
     "build": "tsc --build",
     "build:clean": "tsc --build --clean",
-    "build:force": "tsc --build --force"
+    "build:force": "tsc --build --force",
+    "prepare": "husky install"
   },
   "bin": {
     "hello-pdf": "./bin/hello-pdf",
     "hello-pdf-server": "./bin/hello-pdf-server",
     "hello-pdf-worker": "./bin/hello-pdf-worker"
   },
+  "files": [
+    "dist/**/*",
+    "bin/*"
+  ],
   "dependencies": {
     "@appsignal/express": "^1.0.25",
     "@appsignal/nodejs": "^2.3.1",
@@ -39,6 +43,7 @@
     "@types/express": "^4.17.13",
     "@types/lodash": "^4.14.178",
     "@types/multer": "^1.4.7",
-    "typescript": "^4.5.5"
+    "typescript": "^4.5.5",
+    "husky": "^7.0.0"
   }
 }
