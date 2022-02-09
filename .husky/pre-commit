@@ -1,5 +1,5 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-yarn pack
-git add hello-pdf-v[0-9].[0-9].[0-9].tgz
+yarn pack --filename hello-pdf.tgz
+git add hello-pdf.tgz
