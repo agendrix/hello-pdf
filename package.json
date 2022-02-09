@@ -13,7 +13,8 @@
     "build": "tsc --build",
     "build:clean": "tsc --build --clean",
     "build:force": "tsc --build --force",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "prepack": "yarn build"
   },
   "bin": {
     "hello-pdf": "./bin/hello-pdf",
