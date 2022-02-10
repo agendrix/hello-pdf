@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
-import { ErrorResult } from "../../shared";
+import { ErrorResult } from "../../lib";
 
 export default function (mandatoryBodyFields: Array<string>) {
   return async (req: Request, res: Response, next: NextFunction) => {

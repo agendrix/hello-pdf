@@ -1,3 +1,3 @@
 import Consumer from "./Consumer";
 
-Consumer.consume();
+export default Consumer;

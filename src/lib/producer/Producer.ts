@@ -1,6 +1,6 @@
 import { Queue as BullQueue, Job } from "bull";
 
-import { HtmlDocument, Queue } from "../../shared";
+import { HtmlDocument, Queue } from "..";
 
 const JOB_EXPIRATION_IN_SECONDS = process.env.JOB_EXPIRATION_IN_SECONDS
   ? Number(process.env.JOB_EXPIRATION_IN_SECONDS)

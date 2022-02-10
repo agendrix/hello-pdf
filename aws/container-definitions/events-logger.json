@@ -1,0 +1,25 @@
+[
+  {
+    "essential": true,
+    "name": "events-logger",
+    "image": "<IMAGE>",
+    "command": ["hello-pdf-events-logger"],
+    "portMappings": [],
+    "environment": [],
+    "secrets": ["Secrets from app.secrets.json will be used during the deployment workflow"],
+    "linuxParameters": {
+      "initProcessEnabled": true
+    },
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "/ecs/<CLUSTER>/events-logger",
+        "awslogs-region": "ca-central-1",
+        "awslogs-stream-prefix": "events-logger"
+      }
+    },
+    "cpu": 0,
+    "volumesFrom": [],
+    "mountPoints": []
+  }
+]

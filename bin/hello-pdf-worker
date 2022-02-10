@@ -5,5 +5,5 @@ const args = process.argv.slice(2);
 if (args.includes("--health")) {
   require("../dist/lib/consumer/HealthCheck.js");
 } else {
-  require("../dist/lib/consumer/index.js");
+  require("../dist/worker/index.js");
 }

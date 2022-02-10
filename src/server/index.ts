@@ -1,11 +1,10 @@
 // To auto-instrument modules, the Appsignal module must be both required and initialized before any other package
-import AppSignal from "./AppSignal";
-
 import { expressMiddleware as appSignalMiddleware, expressErrorHandler } from "@appsignal/express";
 import bodyParser from "body-parser";
 import express from "express";
 
-import Logger from "../shared/Logger";
+import { Logger } from "../lib";
+import AppSignal from "./AppSignal";
 import Convert from "./convert";
 import Health from "./health";
 import { CamelizeBodyKeys, ErrorHandler, RequestLogger } from "./middleware";

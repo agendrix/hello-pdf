@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
-import { Logger } from "../../shared";
+import { Logger } from "../../lib";
 
 const skipLoggingForPaths = ["/health"];
 

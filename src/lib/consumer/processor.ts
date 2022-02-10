@@ -1,8 +1,7 @@
 import { Job, JobId } from "bull";
 import { deflateSync } from "zlib";
 
-import { AsyncResult, HtmlDocument, Http, Logger } from "../../shared";
-import { Status } from "../../shared/types";
+import { AsyncResult, HtmlDocument, Http, Logger, Status } from "../../lib";
 import PdfEngine from "../pdfEngine";
 
 module.exports = async function (job: Job<HtmlDocument>) {

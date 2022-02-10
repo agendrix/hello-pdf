@@ -15,5 +15,5 @@
     "isolatedModules": true,
     "outDir": "dist"
   },
-  "include": ["src/**/*", "lib/**/*", "shared/**/*"]
+  "include": ["src/**/*"]
 }

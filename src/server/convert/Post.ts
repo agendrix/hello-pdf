@@ -1,9 +1,8 @@
 import { Job } from "bull";
 import { Request, Response } from "express";
 
+import { AsyncResult, ErrorResult, GetJob, HtmlDocument, Status } from "../../lib";
 import Producer from "../../lib/producer";
-import { AsyncResult, ErrorResult, GetJob, HtmlDocument } from "../../shared";
-import { Status } from "../../shared/types";
 import { RequiredBodyFields } from "../middleware";
 
 const mandatoryFields = ["filename", "body"];

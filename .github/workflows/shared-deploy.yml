@@ -121,14 +121,14 @@ jobs:
       nginx_image: ${{ steps.build-nginx.outputs.image }}
       app_image: ${{ steps.build-app.outputs.image }}
 
-  deploy-app-worker:
-    name: Deploy nginx | app | worker
+  deploy:
+    name: Deploy nginx | app | worker | events-logger
     runs-on: ubuntu-latest
     needs: [build-images]
     strategy:
       fail-fast: false
       matrix:
-        service: [nginx, app, worker]
+        service: [nginx, app, worker, events-logger]
         include:
           - service: nginx
             image: ${{ needs.build-images.outputs.nginx_image }}
@@ -137,6 +137,9 @@ jobs:
             image: ${{ needs.build-images.outputs.app_image }}
             secrets_path: aws/container-definitions/app.secrets.json
           - service: worker
+            image: ${{ needs.build-images.outputs.app_image }}
+            secrets_path: aws/container-definitions/app.secrets.json
+          - service: events-logger
             image: ${{ needs.build-images.outputs.app_image }}
             secrets_path: aws/container-definitions/app.secrets.json
     steps:
@@ -213,7 +216,7 @@ jobs:
     needs:
       - pre-build
       - build-images
-      - deploy-app-worker
+      - deploy
 
     steps:
       - name: Checkout
@@ -233,7 +236,7 @@ jobs:
       - if: |
           env.PING_SLACK == 'true' &&
           steps.workflow-run-state.outputs.state == 'SUCCEEDED' &&
-          needs.deploy-app-worker-rpc.outputs.deployment_outcome == 'skipped'
+          needs.deploy.outputs.deployment_outcome == 'skipped'
         name: Ping Slack for skipped
         id: ping-for-skipped
         uses: agendrix/slack-notifier/ping-slack@v1.0.5

@@ -1,6 +1,6 @@
 import Puppeteer from "puppeteer";
 
-import { HtmlDocument, Logger } from "../../shared";
+import { HtmlDocument } from "..";
 
 // https://peter.sh/experiments/chromium-command-line-switches/
 const puppeteerFlags = [

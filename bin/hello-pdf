@@ -1,4 +1,5 @@
 #!/usr/bin/env node
 
-require("../dist/src/index.js");
-require("../dist/lib/consumer/index.js");
+require("../dist/server/index.js");
+require("../dist/worker/index.js");
+require("../dist/eventsLogger/index.js");
