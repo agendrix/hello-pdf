@@ -9,22 +9,27 @@ module.exports = async function (job: Job<HtmlDocument>) {
   return new Promise(async (resolve, reject) => {
     const document = job.data;
     const { webhookUrl, s3Url } = document.meta;
+    const async = webhookUrl && s3Url;
 
     try {
       const pdf = await PdfEngine.render(document);
 
-      if (s3Url) {
+      if (async) {
         await uploadPdfToS3(s3Url, pdf);
         await updateJobStatus(job, Status.Completed);
       }
 
       resolve(s3Url ? document : compress(pdf));
-    } catch (e: any) {
-      await updateJobStatus(job, Status.Failed);
-      Logger.error("An error occured", e);
-      reject(e);
+    } catch (error: any) {
+      if (isLastAttempt(job)) {
+        await updateJobStatus(job, Status.Failed);
+      }
+      Logger.error("An error occured", error);
+      reject(error);
     } finally {
-      if (webhookUrl) await postToWebhook(webhookUrl, job.id);
+      if (async && (job.data.meta.status === Status.Completed || job.data.meta.status === Status.Failed)) {
+        await postToWebhook(webhookUrl, job.id);
+      }
     }
   });
 };
@@ -61,4 +66,8 @@ async function postToWebhook(url: string, jobId: JobId) {
 
 function compress(file: Buffer) {
   return deflateSync(file);
+}
+
+function isLastAttempt(job: Job) {
+  return job.attemptsMade === Number(job.opts.attempts) - 1;
 }

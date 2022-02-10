@@ -95,14 +95,6 @@ class Consumer {
       // A job successfully removed.
       Logger.log("removed", { jobId });
     });
-
-    // Queue.on('global:progress', function (jobId, progress) {
-    //   // A job's progress was updated!
-    // })
-
-    // Queue.on('global:drained', function () {
-    //   // Emitted every time the queue has processed all the waiting jobs (even if there can be some delayed jobs not yet processed)
-    // });
   }
 
   private logStats() {
