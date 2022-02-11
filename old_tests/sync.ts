@@ -1,7 +1,7 @@
 import { writeFileSync } from "fs";
 import { inflateSync } from "zlib";
 
-import { Http } from "../shared";
+import { Http } from "../src/lib";
 import { FILENAME, GetBasePayload, URL } from "./utils";
 
 const syncTest = async () => {

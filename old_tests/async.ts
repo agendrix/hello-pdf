@@ -1,7 +1,7 @@
 import express from "express";
 import fs from "fs";
 
-import { Http } from "../shared";
+import { Http } from "../src/lib";
 import { FILENAME, GetBasePayload, URL } from "./utils";
 
 const asyncTest = async () => {
