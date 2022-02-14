@@ -1,5 +1,4 @@
 import { Job, JobId } from "bull";
-import { deflateSync } from "zlib";
 
 import { AsyncResult, HtmlDocument, Http, Logger, Status } from "../../lib";
 import PdfEngine from "../pdfEngine";
@@ -18,7 +17,7 @@ module.exports = async function (job: Job<HtmlDocument>) {
         await updateJobStatus(job, Status.Completed);
       }
 
-      resolve(s3Url ? document : compress(pdf));
+      resolve(s3Url ? document : pdf.toString("base64"));
     } catch (error: any) {
       if (isLastAttempt(job)) {
         await updateJobStatus(job, Status.Failed);
@@ -63,9 +62,9 @@ async function postToWebhook(url: string, jobId: JobId) {
   }
 }
 
-function compress(file: Buffer) {
-  return deflateSync(file);
-}
+// function compress(file: Buffer) {
+//   return deflateSync(file);
+// }
 
 function isLastAttempt(job: Job) {
   return job.attemptsMade === Number(job.opts.attempts) - 1;

@@ -33,7 +33,7 @@ const post = async (req: Request, res: Response) => {
       }
 
       res.contentType("application/pdf");
-      return res.status(200).send(Buffer.from(job?.returnvalue.data));
+      return res.status(200).send(Buffer.from(job.returnvalue, "base64"));
     } catch {
       throw new ErrorResult("The job failed all of its attempts.");
     }

@@ -1,4 +1,4 @@
-const Queue = require("../../dist/src/lib/Queue").default;
+const Queue = require("../../dist/lib/Queue").default;
 
 module.exports = async function () {
   Queue.obliterate({ force: true });
