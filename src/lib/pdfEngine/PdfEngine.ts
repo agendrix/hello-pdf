@@ -18,28 +18,30 @@ const userDataDir = process.env.NODE_ENV == "production" ? "/tmp" : undefined;
 class PdfEngine {
   public constructor() {}
 
-  async render(document: HtmlDocument): Promise<Buffer> {
+  static async render(document: HtmlDocument): Promise<Buffer> {
     return new Promise(async (resolve, reject) => {
       const browser = await Puppeteer.launch({ args: puppeteerFlags, userDataDir: userDataDir });
-      const page = await browser.newPage();
-      page.on("error", (e) => reject(e));
-
-      await page.setContent(document.body, { waitUntil: "networkidle2" });
-      const pdf = await page.pdf({
-        displayHeaderFooter: (document.header || document.footer) != undefined,
-        headerTemplate: document.header,
-        footerTemplate: document.footer,
-        printBackground: true,
-        margin: document.margins,
-        landscape: document.landscape,
-        scale: document.scale,
-        timeout: 1000 * 60 * 15,
-      });
-
-      resolve(pdf);
-      browser.close();
+      try {
+        const page = await browser.newPage();
+        await page.setContent(document.body, { waitUntil: "networkidle2" });
+        const pdf = await page.pdf({
+          displayHeaderFooter: (document.header || document.footer) != undefined,
+          headerTemplate: document.header,
+          footerTemplate: document.footer,
+          printBackground: true,
+          margin: document.margins,
+          landscape: document.landscape,
+          scale: document.scale,
+          timeout: process.env.HELLO_PDF_PRINT_TIMEOUT ? Number(process.env.HELLO_PDF_PRINT_TIMEOUT) : 1000 * 60 * 15,
+        });
+        resolve(pdf);
+      } catch (e) {
+        reject(e);
+      } finally {
+        browser.close();
+      }
     });
   }
 }
 
-export default new PdfEngine();
+export default PdfEngine;
