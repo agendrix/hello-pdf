@@ -1,5 +1,9 @@
 import { jest } from "@jest/globals";
+import { writeSync } from "fs";
+// @ts-expect-error
+import PdfParser from "pdf2json";
 import request from "supertest";
+import tmp from "tmp";
 import { deflateSync } from "zlib";
 
 import { HtmlFile } from "../../../../tests/helpers";
@@ -55,6 +59,34 @@ describe("POST /convert", () => {
         .set("Content-Type", "application/json")
         .send(payloadWithoutFileName);
       expect(response.statusCode).toBe(400);
+    });
+
+    test("It should return valid PDF file.", (done) => {
+      const payloadWithoutFileName = JSON.stringify({
+        body: HtmlFile,
+        filename: "test",
+      });
+
+      request(app)
+        .post("/convert")
+        .set("Content-Type", "application/json")
+        .send(payloadWithoutFileName)
+        .then((response) => {
+          const tmpFile = tmp.fileSync();
+          writeSync(tmpFile.fd, Buffer.from(response.body, "base64"));
+
+          const pdfParser = new PdfParser();
+          pdfParser.on("pdfParser_dataReady", (pdfData: any) => {
+            expect(pdfData).toBeTruthy();
+            done();
+          });
+
+          pdfParser.on("pdfParser_dataError", (pdfData: any) => {
+            throw new Error("Pdf is not valid");
+          });
+
+          pdfParser.loadPDF(tmpFile.name, 0);
+        });
     });
   });
 

@@ -1,3 +1,6 @@
+// @ts-expect-error
+import PdfParser from "pdf2json";
+
 import PdfEngine from "../";
 import { HtmlDocument, Status } from "../..";
 import { HtmlFile } from "../../../../tests/helpers";

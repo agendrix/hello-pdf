@@ -1,4 +1,5 @@
 import { Console } from "console";
+import debug from "debug";
 
 enum MessageLevel {
   Info = "INFO",
@@ -47,6 +48,9 @@ class Logger extends Console {
 
   static error(msg: string, ctx?: Object) {
     this.getInstance().log(new Log(msg, ctx, MessageLevel.Error).toString());
+  }
+  static debug(namespace: string, msg: string) {
+    debug(`hello-pdf:${namespace}`)(msg);
   }
 }
 

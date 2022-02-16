@@ -1,6 +1,10 @@
 import { jest } from "@jest/globals";
 import BullQueue from "bull";
 import express from "express";
+import { writeSync } from "fs";
+// @ts-expect-error
+import PdfParser from "pdf2json";
+import tmp from "tmp";
 import { promisify } from "util";
 
 import { HtmlDocument, Queue, Status, PdfEngine as unMockedPdfEngine } from "../..";
@@ -119,5 +123,26 @@ describe("processor", () => {
     } finally {
       process.env.HELLO_PDF_PRINT_TIMEOUT = undefined;
     }
+  });
+
+  test("It should produce a valid PDF file", (done) => {
+    Queue.add(document).then((job) => {
+      job.finished().then((returnValue) => {
+        const tmpFile = tmp.fileSync();
+        writeSync(tmpFile.fd, Buffer.from(returnValue, "base64"));
+
+        const pdfParser = new PdfParser();
+        pdfParser.on("pdfParser_dataReady", (pdfData: any) => {
+          expect(pdfData).toBeTruthy();
+          done();
+        });
+
+        pdfParser.on("pdfParser_dataError", (pdfData: any) => {
+          throw new Error("Pdf is not valid");
+        });
+
+        pdfParser.loadPDF(tmpFile.name, 0);
+      });
+    });
   });
 });

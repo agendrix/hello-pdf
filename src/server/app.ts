@@ -7,6 +7,7 @@ import AppSignal from "./AppSignal";
 import Convert from "./convert";
 import Health from "./health";
 import { CamelizeBodyKeys, ErrorHandler, RequestLogger, ShouldCompress } from "./middleware";
+import Monitor from "./monitor";
 
 const app = express();
 
@@ -26,9 +27,12 @@ app.use(appSignalMiddleware(AppSignal));
 // Routers
 app.get("/health", Health);
 app.use("/convert", Convert);
+app.use("/monitor", Monitor);
 
 // Error handlers
 app.use(expressErrorHandler(AppSignal));
 app.use(ErrorHandler);
+
+app.use(express.static("public"));
 
 export default app;

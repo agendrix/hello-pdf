@@ -8,7 +8,7 @@ module.exports = async function (job: Job<HtmlDocument>) {
     const document = job.data;
     const { webhookUrl, s3Url } = document.meta;
     const async = webhookUrl && s3Url;
-
+    Logger.debug("processor", `Starting job ${job.id}, async: ${!!async}`);
     try {
       const pdf = await PdfEngine.render(document);
 
@@ -23,7 +23,7 @@ module.exports = async function (job: Job<HtmlDocument>) {
       if (isLastAttempt(job)) {
         await updateJobStatus(job, Status.Failed);
       }
-      Logger.error("An error occured", error);
+      Logger.error(`An error occured while processing job: ${error}`);
       reject(error);
     } finally {
       if (async && (job.data.meta.status === Status.Completed || job.data.meta.status === Status.Failed)) {
@@ -34,12 +34,14 @@ module.exports = async function (job: Job<HtmlDocument>) {
 };
 
 function updateJobStatus(job: Job<HtmlDocument>, status: Status): Promise<void> {
+  Logger.debug("processor", `Updating job status to ${status}`);
   const document = job.data;
   document.meta = { ...document.meta, status: status };
   return job.update(document);
 }
 
 async function uploadPdfToS3(presignedS3Url: string, pdf: Buffer) {
+  Logger.debug("processor", "Starting upload to s3");
   const uploadResponse = await Http.put(presignedS3Url, pdf, "application/pdf");
   if (uploadResponse.statusCode != 200) {
     throw new Error(
@@ -48,9 +50,11 @@ async function uploadPdfToS3(presignedS3Url: string, pdf: Buffer) {
       }, data: ${uploadResponse.data.toString("utf-8")}`,
     );
   }
+  Logger.debug("processor", "Finished upload to s3");
 }
 
 async function postToWebhook(url: string, jobId: JobId) {
+  Logger.debug("processor", "Posting to webhook");
   const response = await Http.post(url, new AsyncResult(jobId));
 
   if (response.statusCode != 200) {

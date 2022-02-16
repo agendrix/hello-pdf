@@ -36,7 +36,13 @@ class EventsLogger {
     });
 
     Queue.on("global:completed", function (jobId, _result) {
-      Logger.log("done", { jobId });
+      Queue.getJob(jobId).then((job) => {
+        let logContext = { jobId } as Object;
+        if (job && job.processedOn && job.finishedOn) {
+          logContext = { ...logContext, processingTime: job.finishedOn - job.processedOn };
+        }
+        Logger.log("done", logContext);
+      });
     });
 
     Queue.on("global:failed", function (jobId, err) {
