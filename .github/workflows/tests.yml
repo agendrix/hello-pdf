@@ -11,6 +11,7 @@ on:
 env:
   # Increase JS heap limit. Fix for https://github.com/nodejs/node/issues/10137
   NODE_OPTIONS: --max-old-space-size=4096
+  NODE_ENV: test
 
 jobs:
   tests:

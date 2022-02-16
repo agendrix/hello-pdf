@@ -12,6 +12,10 @@ const puppeteerFlags = [
   "--no-sandbox",
 ];
 
+if (process.env.NODE_ENV == "test") {
+  puppeteerFlags.push('--js-flags="--max-old-space-size=1024"');
+}
+
 // 'userDataDir' enables sharing of cached assets between browser sessions
 const userDataDir = process.env.NODE_ENV == "production" ? "/tmp" : undefined;
 

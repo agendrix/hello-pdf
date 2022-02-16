@@ -7,7 +7,7 @@
     "start:server": "yarn build && ./bin/hello-pdf-server",
     "start:worker": "yarn build && ./bin/hello-pdf-worker",
     "start:events-logger": "yarn build && ./bin/hello-pdf-events-logger",
-    "test": "jest --forceExit --runInBand",
+    "test": "jest --forceExit --runInBand --logHeapUsage",
     "build": "tsc --build",
     "build:clean": "tsc --build --clean",
     "build:force": "tsc --build --force",
