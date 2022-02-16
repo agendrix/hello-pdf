@@ -1,0 +1,47 @@
+name: QA/Tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      # - master
+      # - develop
+      - hackaton-2021
+
+env:
+  # Increase JS heap limit. Fix for https://github.com/nodejs/node/issues/10137
+  NODE_OPTIONS: --max-old-space-size=4096
+
+jobs:
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+
+      - name: Get yarn & node_modules cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            .cache/yarn
+            node_modules
+          key: yarn-${{ inputs.node-env }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: yarn-${{ inputs.node-env }}
+
+      - name: Run yarn install
+        run: yarn install --production=false --frozen-lockfile --ignore-optional --cache-folder .cache/yarn
+        shell: bash
+
+      - name: Jest tests
+        run: yarn test
