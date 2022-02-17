@@ -59,7 +59,7 @@ yarn test
 Hello pdf can also be incorporated in an existing project as a node module:
 
 ```
-yarn add https://github.com/agendrix/hello-pdf/releases/download/v1.0.2/hello-pdf.tgz
+yarn add git+ssh://git@github.com:agendrix/hello-pdf.git#v1.0.0
 yarn hello-pdf
 ```
 
