@@ -20,10 +20,11 @@ brew install yarn
 
 ## Setup
 
-Run the following command to install our dependencies
+Run the following commands to install our dependencies and enable git-hooks
 
 ```
 yarn install
+npx husky install
 ```
 
 ## Start the project
