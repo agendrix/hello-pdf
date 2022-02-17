@@ -67,6 +67,10 @@ yarn hello-pdf
 yarn test
 ```
 
+## Monitoring
+We use [Bullboard](https://github.com/felixmosh/bull-board) to monitor the Bull queue.
+The monitoring page is accessible at `/monitor`
+
 ## Debugging
 
 To debug Hello pdf, use the environment variable `DEBUG=hello-pdf:*` to see debugging logs.
