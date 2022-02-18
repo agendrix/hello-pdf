@@ -2,12 +2,12 @@
 import PdfParser from "pdf2json";
 
 import PdfEngine from "../";
-import { HtmlDocument, Status } from "../..";
-import { HtmlFile } from "../../../../tests/helpers";
+// @ts-expect-error
+import { syncDocument } from "../../../../tests/helpers";
 
 describe("pdfEngine", () => {
   test("It should reject promise after timeout.", (done) => {
-    const document = new HtmlDocument("test", HtmlFile, new HtmlDocument.Metadata(Status.Queued));
+    const document = syncDocument();
     let promiseRejected = false;
 
     process.env.HELLO_PDF_PRINT_TIMEOUT = "5";

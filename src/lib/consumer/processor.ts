@@ -1,6 +1,7 @@
 import { Job, JobId } from "bull";
 
 import { AsyncResult, HtmlDocument, Http, Logger, Status } from "../../lib";
+import { cleanJobDataForStorage } from "../Queue";
 import PdfEngine from "../pdfEngine";
 import { IHtmlDocument } from "../types";
 
@@ -15,12 +16,13 @@ module.exports = async function (job: Job<IHtmlDocument>) {
 
       if (async) {
         await uploadPdfToS3(s3Url, pdf);
+        await cleanJobDataForStorage(job);
+      } else {
+        await updateJobData(job, { renderedPdf: pdf.toString("base64") });
       }
 
       await updateJobStatus(job, Status.Completed);
-
-      // We only store the pdf if the job is sync in order to reduce memory footprint
-      resolve(async ? null : pdf.toString("base64"));
+      resolve(null);
     } catch (error: any) {
       if (isLastAttempt(job)) {
         await updateJobStatus(job, Status.Failed);
@@ -34,6 +36,11 @@ module.exports = async function (job: Job<IHtmlDocument>) {
     }
   });
 };
+
+function updateJobData(job: Job<IHtmlDocument>, data: Partial<IHtmlDocument>): Promise<void> {
+  Logger.debug("processor", `Updating job data`);
+  return job.update({ ...job.data, ...data });
+}
 
 function updateJobStatus(job: Job<IHtmlDocument>, status: Status): Promise<void> {
   Logger.debug("processor", `Updating job status to ${status}`);

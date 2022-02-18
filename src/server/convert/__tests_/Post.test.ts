@@ -6,7 +6,9 @@ import request from "supertest";
 import tmp from "tmp";
 import { gzipSync } from "zlib";
 
-import { HtmlFile } from "../../../../tests/helpers";
+// @ts-expect-error
+import { htmlFile } from "../../../../tests/helpers";
+import { Queue } from "../../../lib";
 import app from "../../app";
 
 jest.setTimeout(10000);
@@ -16,7 +18,7 @@ describe("POST /convert", () => {
     test("It should return successfully handle application/json content type.", async () => {
       const payload = JSON.stringify({
         filename: "test",
-        body: HtmlFile,
+        body: htmlFile,
       });
 
       const response = await request(app).post("/convert").set("Content-Type", "application/json").send(payload);
@@ -27,7 +29,7 @@ describe("POST /convert", () => {
     test("It should return successfully handle gzip encoding.", async () => {
       const payload = JSON.stringify({
         filename: "test",
-        body: HtmlFile,
+        body: htmlFile,
       });
 
       const response = await request(app)
@@ -51,7 +53,7 @@ describe("POST /convert", () => {
 
     test("It should return an error if filename field is missing.", async () => {
       const payloadWithoutFileName = JSON.stringify({
-        body: HtmlFile,
+        body: htmlFile,
       });
 
       const response = await request(app)
@@ -63,7 +65,7 @@ describe("POST /convert", () => {
 
     test("It should return valid PDF file.", (done) => {
       const payloadWithoutFileName = JSON.stringify({
-        body: HtmlFile,
+        body: htmlFile,
         filename: "test",
       });
 
@@ -88,19 +90,52 @@ describe("POST /convert", () => {
           pdfParser.loadPDF(tmpFile.name, 0);
         });
     });
+
+    test("It should clean job data after sending it to the client.", async () => {
+      await Queue.obliterate({ force: true });
+      expect(await Queue.count()).toEqual(0);
+      const payload = JSON.stringify({
+        filename: "test",
+        body: htmlFile,
+      });
+
+      const response = await request(app).post("/convert").set("Content-Type", "application/json").send(payload);
+      expect(response.statusCode).toBe(200);
+
+      const jobs = await Queue.getCompleted();
+      expect(jobs.length).toEqual(1);
+
+      const job = jobs.pop();
+      expect(job?.data?.renderedPdf).toEqual("");
+      expect(job?.data?.body).toEqual("");
+      expect(job?.data?.header).toEqual("");
+      expect(job?.data?.footer).toEqual("");
+    });
   });
 
   describe("async", () => {
     test("It should return instance of AsyncResult if s3Url is present.", async () => {
       const payload = JSON.stringify({
         filename: "test",
-        body: HtmlFile,
+        body: htmlFile,
         s3Url: "http://localhost",
+        webhookUrl: "http://localhost",
       });
 
       const response = await request(app).post("/convert").set("Content-Type", "application/json").send(payload);
       expect(response.statusCode).toBe(200);
       expect(response.body).toHaveProperty("id");
+    });
+
+    test("It should return a bad request error if one of s3Url and webhookUrl not present.", async () => {
+      const payload = JSON.stringify({
+        filename: "test",
+        body: htmlFile,
+        s3Url: "http://localhost",
+      });
+
+      const response = await request(app).post("/convert").set("Content-Type", "application/json").send(payload);
+      expect(response.statusCode).toBe(400);
     });
   });
 });

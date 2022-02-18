@@ -13,6 +13,7 @@ export interface IHtmlDocument {
   scale: number;
   landscape: boolean;
   compressed: boolean;
+  renderedPdf?: string;
 }
 
 export default class HtmlDocument implements IHtmlDocument {

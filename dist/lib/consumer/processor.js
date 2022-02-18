@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const lib_1 = require("../../lib");
+const Queue_1 = require("../Queue");
 const pdfEngine_1 = __importDefault(require("../pdfEngine"));
 module.exports = function (job) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -25,10 +26,13 @@ module.exports = function (job) {
                 const pdf = yield pdfEngine_1.default.render(lib_1.HtmlDocument.from(document));
                 if (async) {
                     yield uploadPdfToS3(s3Url, pdf);
+                    yield (0, Queue_1.cleanJobDataForStorage)(job);
+                }
+                else {
+                    yield updateJobData(job, { renderedPdf: pdf.toString("base64") });
                 }
                 yield updateJobStatus(job, lib_1.Status.Completed);
-                // We only store the pdf if the job is sync in order to reduce memory footprint
-                resolve(async ? null : pdf.toString("base64"));
+                resolve(null);
             }
             catch (error) {
                 if (isLastAttempt(job)) {
@@ -45,6 +49,10 @@ module.exports = function (job) {
         }));
     });
 };
+function updateJobData(job, data) {
+    lib_1.Logger.debug("processor", `Updating job data`);
+    return job.update(Object.assign(Object.assign({}, job.data), data));
+}
 function updateJobStatus(job, status) {
     lib_1.Logger.debug("processor", `Updating job status to ${status}`);
     const document = job.data;

@@ -1,13 +1,13 @@
 import request from "supertest";
 
-import { HtmlDocument, Status } from "../../../lib";
+// @ts-expect-error
+import { syncDocument } from "../../../../tests/helpers";
 import Producer from "../../../lib/producer";
 import app from "../../app";
 
 describe("GET /convert", () => {
   test("It should return a successfull response if the job is found.", async () => {
-    const metadata = new HtmlDocument.Metadata(Status.Queued);
-    const document = new HtmlDocument("filename", "<html></html>", metadata);
+    const document = syncDocument();
     const job = await Producer.enqueue(document);
 
     const response = await request(app).get(`/convert/${job.id}`);
