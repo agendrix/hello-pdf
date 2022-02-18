@@ -22,18 +22,19 @@ module.exports = function (job) {
             const async = webhookUrl && s3Url;
             lib_1.Logger.debug("processor", `Starting job ${job.id}, async: ${!!async}`);
             try {
-                const pdf = yield pdfEngine_1.default.render(document);
+                const pdf = yield pdfEngine_1.default.render(lib_1.HtmlDocument.from(document));
                 if (async) {
                     yield uploadPdfToS3(s3Url, pdf);
                 }
                 yield updateJobStatus(job, lib_1.Status.Completed);
-                resolve(pdf.toString("base64"));
+                // We only store the pdf if the job is sync in order to reduce memory footprint
+                resolve(async ? null : pdf.toString("base64"));
             }
             catch (error) {
                 if (isLastAttempt(job)) {
                     yield updateJobStatus(job, lib_1.Status.Failed);
                 }
-                lib_1.Logger.error(`An error occured while processing job: ${error}`);
+                lib_1.Logger.error(`An error occured while processing job: ${error}`, error);
                 reject(error);
             }
             finally {

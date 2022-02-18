@@ -1,15 +1,16 @@
 import { Queue as BullQueue, Job } from "bull";
 
 import { HtmlDocument, Logger, Queue } from "..";
+import { IHtmlDocument } from "../types";
 
 const JOB_EXPIRATION_IN_SECONDS = process.env.JOB_EXPIRATION_IN_SECONDS
   ? Number(process.env.JOB_EXPIRATION_IN_SECONDS)
   : 60 * 60 * 24 * 7;
 
 class Producer {
-  constructor(private queue: BullQueue<HtmlDocument>) {}
+  constructor(private queue: BullQueue<IHtmlDocument>) {}
 
-  async enqueue(document: HtmlDocument): Promise<Job<HtmlDocument>> {
+  async enqueue(document: HtmlDocument): Promise<Job<IHtmlDocument>> {
     Logger.debug("producer", "Enqueing job");
     return this.queue.add(document, {
       attempts: 10,

@@ -2,15 +2,16 @@ import { Job, JobId } from "bull";
 
 import { AsyncResult, HtmlDocument, Http, Logger, Status } from "../../lib";
 import PdfEngine from "../pdfEngine";
+import { IHtmlDocument } from "../types";
 
-module.exports = async function (job: Job<HtmlDocument>) {
+module.exports = async function (job: Job<IHtmlDocument>) {
   return new Promise(async (resolve, reject) => {
     const document = job.data;
     const { webhookUrl, s3Url } = document.meta;
     const async = webhookUrl && s3Url;
     Logger.debug("processor", `Starting job ${job.id}, async: ${!!async}`);
     try {
-      const pdf = await PdfEngine.render(document);
+      const pdf = await PdfEngine.render(HtmlDocument.from(document));
 
       if (async) {
         await uploadPdfToS3(s3Url, pdf);
@@ -18,12 +19,13 @@ module.exports = async function (job: Job<HtmlDocument>) {
 
       await updateJobStatus(job, Status.Completed);
 
-      resolve(pdf.toString("base64"));
+      // We only store the pdf if the job is sync in order to reduce memory footprint
+      resolve(async ? null : pdf.toString("base64"));
     } catch (error: any) {
       if (isLastAttempt(job)) {
         await updateJobStatus(job, Status.Failed);
       }
-      Logger.error(`An error occured while processing job: ${error}`);
+      Logger.error(`An error occured while processing job: ${error}`, error);
       reject(error);
     } finally {
       if (async && (job.data.meta.status === Status.Completed || job.data.meta.status === Status.Failed)) {
@@ -33,7 +35,7 @@ module.exports = async function (job: Job<HtmlDocument>) {
   });
 };
 
-function updateJobStatus(job: Job<HtmlDocument>, status: Status): Promise<void> {
+function updateJobStatus(job: Job<IHtmlDocument>, status: Status): Promise<void> {
   Logger.debug("processor", `Updating job status to ${status}`);
   const document = job.data;
   document.meta = { ...document.meta, status: status };

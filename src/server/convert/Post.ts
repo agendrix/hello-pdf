@@ -1,8 +1,9 @@
 import { Job } from "bull";
 import { Request, Response } from "express";
 
-import { AsyncResult, ErrorResult, GetJob, HtmlDocument, Status } from "../../lib";
+import { AsyncResult, ErrorResult, GetJob, HtmlDocument, Queue, Status } from "../../lib";
 import Producer from "../../lib/producer";
+import { IHtmlDocument } from "../../lib/types";
 import { RequiredBodyFields } from "../middleware";
 
 const mandatoryFields = ["filename", "body"];
@@ -22,7 +23,7 @@ const post = async (req: Request, res: Response) => {
   const metadata = new HtmlDocument.Metadata(Status.Queued, webhookUrl, s3Url);
   const document = new HtmlDocument(filename, body, metadata, margins, header, footer, scale, landscape);
 
-  let job: Job<HtmlDocument> | null = await Producer.enqueue(document);
+  let job: Job<IHtmlDocument> | null = await Producer.enqueue(document);
 
   if (!s3Url) {
     try {

@@ -10,6 +10,7 @@ import { promisify } from "util";
 import { HtmlDocument, Queue, Status, PdfEngine as unMockedPdfEngine } from "../..";
 import { HtmlFile } from "../../../../tests/helpers";
 import PdfEngine from "../../pdfEngine";
+import { IHtmlDocument } from "../../types";
 
 const processor = require("../processor");
 
@@ -41,7 +42,7 @@ describe("processor", () => {
       }),
     }));
 
-    const testQueue = new BullQueue<HtmlDocument>("test-queue", "redis://127.0.0.1:6379");
+    const testQueue = new BullQueue<IHtmlDocument>("test-queue", "redis://127.0.0.1:6379");
     const retries = 3;
     const job = await testQueue.add(document, {
       attempts: retries,
@@ -74,7 +75,7 @@ describe("processor", () => {
       }),
     }));
 
-    const testQueue = new BullQueue<HtmlDocument>("test-queue", "redis://127.0.0.1:6379");
+    const testQueue = new BullQueue<IHtmlDocument>("test-queue", "redis://127.0.0.1:6379");
     const retries = 3;
     const job = await testQueue.add(document, {
       attempts: retries,
@@ -109,7 +110,7 @@ describe("processor", () => {
 
   test("It should retry a job after a PdfEngine timeout", async () => {
     process.env.HELLO_PDF_PRINT_TIMEOUT = "5";
-    const testQueue = new BullQueue<HtmlDocument>("test-queue", "redis://127.0.0.1:6379");
+    const testQueue = new BullQueue<IHtmlDocument>("test-queue", "redis://127.0.0.1:6379");
     const retries = 3;
     const job = await testQueue.add(document, {
       attempts: retries,

@@ -4,7 +4,7 @@ import { writeSync } from "fs";
 import PdfParser from "pdf2json";
 import request from "supertest";
 import tmp from "tmp";
-import { deflateSync } from "zlib";
+import { gzipSync } from "zlib";
 
 import { HtmlFile } from "../../../../tests/helpers";
 import app from "../../app";
@@ -24,7 +24,7 @@ describe("POST /convert", () => {
       expect(response.body).toBeInstanceOf(Buffer);
     });
 
-    test("It should return successfully handle deflated encoding.", async () => {
+    test("It should return successfully handle gzip encoding.", async () => {
       const payload = JSON.stringify({
         filename: "test",
         body: HtmlFile,
@@ -33,8 +33,8 @@ describe("POST /convert", () => {
       const response = await request(app)
         .post("/convert")
         .set("Content-Type", "application/json")
-        .set("Content-Encoding", "deflate")
-        .send(deflateSync(payload))
+        .set("Content-Encoding", "gzip")
+        .send(gzipSync(payload))
         .serialize((obj) => obj);
       expect(response.statusCode).toBe(200);
       expect(response.body).toBeInstanceOf(Buffer);
