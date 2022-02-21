@@ -10,3 +10,7 @@ dist -export-ignore
 
 bin/** -export-ignore
 bin -export-ignore
+
+
+# Hide build from github diffs by default
+dist/** -diff linguist-generated=true 
