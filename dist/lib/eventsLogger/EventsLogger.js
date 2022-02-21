@@ -9,9 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const events_1 = require("events");
 const __1 = require("..");
 class EventsLogger {
     log() {
+        // Prevents MaxListenersExceededWarning warning
+        // https://github.com/OptimalBits/bull/issues/1335
+        events_1.EventEmitter.defaultMaxListeners = 20;
         this.logGlobalQueueEvents();
         this.logStats();
     }

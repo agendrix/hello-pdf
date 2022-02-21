@@ -1,7 +1,13 @@
+import { EventEmitter } from "events";
+
 import { Logger, Queue } from "..";
 
 class EventsLogger {
   log() {
+    // Prevents MaxListenersExceededWarning warning
+    // https://github.com/OptimalBits/bull/issues/1335
+    EventEmitter.defaultMaxListeners = 20;
+
     this.logGlobalQueueEvents();
     this.logStats();
   }
