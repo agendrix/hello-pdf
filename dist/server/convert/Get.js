@@ -10,7 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const lib_1 = require("../../lib");
-exports.default = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const middleware_1 = require("../middleware");
+const get = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const jobId = req.params.jobId;
     const job = yield (0, lib_1.GetJob)(jobId);
     const status = job === null || job === void 0 ? void 0 : job.data.meta.status;
@@ -22,3 +23,4 @@ exports.default = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     else
         res.status(404).json(new lib_1.ErrorResult("Unable to find a job with the provided id."));
 });
+exports.default = (0, middleware_1.AsyncRoute)(get);

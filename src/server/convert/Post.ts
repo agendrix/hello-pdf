@@ -1,11 +1,11 @@
 import { Job } from "bull";
 import { Request, Response } from "express";
 
-import { AsyncResult, ErrorResult, GetJob, HtmlDocument, Logger, Queue, Status } from "../../lib";
+import { AsyncResult, ErrorResult, GetJob, HtmlDocument, Logger, Status } from "../../lib";
 import { cleanJobDataForStorage } from "../../lib/Queue";
 import Producer from "../../lib/producer";
 import { IHtmlDocument } from "../../lib/types";
-import { RequiredBodyFields } from "../middleware";
+import { AsyncRoute, RequiredBodyFields } from "../middleware";
 
 const mandatoryFields = ["filename", "body"];
 const post = async (req: Request, res: Response) => {
@@ -74,4 +74,4 @@ const buildDocument = (requestBody: any) => {
   return new HtmlDocument(filename, body, metadata, margins, header, footer, scale, landscape);
 };
 
-export default [RequiredBodyFields(mandatoryFields), post];
+export default [RequiredBodyFields(mandatoryFields), AsyncRoute(post)];

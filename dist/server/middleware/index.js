@@ -3,7 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ShouldCompress = exports.ErrorHandler = exports.RequestLogger = exports.RequiredBodyFields = exports.CamelizeBodyKeys = void 0;
+exports.ShouldCompress = exports.ErrorHandler = exports.RequestLogger = exports.RequiredBodyFields = exports.CamelizeBodyKeys = exports.AsyncRoute = void 0;
+const AsyncRoute_1 = __importDefault(require("./AsyncRoute"));
+exports.AsyncRoute = AsyncRoute_1.default;
 const CamelizeBodyKeys_1 = __importDefault(require("./CamelizeBodyKeys"));
 exports.CamelizeBodyKeys = CamelizeBodyKeys_1.default;
 const ErrorHandler_1 = __importDefault(require("./ErrorHandler"));

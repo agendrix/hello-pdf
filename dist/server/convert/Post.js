@@ -65,4 +65,4 @@ const buildDocument = (requestBody) => {
     const metadata = new lib_1.HtmlDocument.Metadata(lib_1.Status.Queued, webhookUrl, s3Url);
     return new lib_1.HtmlDocument(filename, body, metadata, margins, header, footer, scale, landscape);
 };
-exports.default = [(0, middleware_1.RequiredBodyFields)(mandatoryFields), post];
+exports.default = [(0, middleware_1.RequiredBodyFields)(mandatoryFields), (0, middleware_1.AsyncRoute)(post)];
